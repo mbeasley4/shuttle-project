@@ -1,6 +1,6 @@
 <h1 align="center" style="position: relative;">
   <br>
-    <img src="./assets/shortening-shuttle-logo.svg" alt="The Shortening Shuttle" width="220">
+    <img src="https://shortening-shuttle.com/cdn/shop/files/shortening-shuttle-logo.png?v=1692796035&width=400" alt="The Shortening Shuttle" width="220">
   <br>
   The Shortening Shuttle – Custom Shopify Theme
 </h1>
