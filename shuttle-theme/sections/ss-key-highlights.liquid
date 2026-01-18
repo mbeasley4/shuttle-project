@@ -1,0 +1,129 @@
+<section class="key-highlights-section">
+  <div class="container mx-auto py-5 px-4">
+    <h2>The Smarter, Safer, and Stronger Way to Handle Hot Fryer Oil</h2>
+    <p>
+      The Shortening Shuttle<sup>®</sup> delivers safer hot oil transport, faster waste oil disposal, and unmatched
+      durability for commercial kitchens. Engineered for restaurants, food trucks, and high-volume operations, it
+      reduces burn risks, boosts efficiency, and provides long-lasting performance you can rely on every day.
+    </p>
+    <div class="highlights">
+      <div class="highlight drop-shadow-xl" data-aos="fade-up" data-aos-once="true">
+        <img
+          src="{{ 'images/safe.png' | asset_url }}"
+          height="auto"
+          width="80"
+          class="mx-auto"
+        >
+        <h3>Safer Hot Oil Transport for Commercial Kitchens</h3>
+        <p class="highlight-description">
+          Protect your team and your flooring. The Shortening Shuttle<sup>®</sup> keeps hot fryer oil fully contained,
+          minimizing burns, spills, and slip hazards during transport. Designed for restaurants, food trucks, and
+          high-volume kitchens, it turns one of the industry’s most dangerous tasks into a controlled, compliant,
+          OSHA-friendly workflow.
+        </p>
+        <p>
+          {{ 'Learn more about key concepts' | link_to: 'https://shopify.dev/docs/storefronts/themes/architecture' }}
+        </p>
+      </div>
+
+      <div class="highlight drop-shadow-xl" data-aos="fade-up" data-aos-delay="200" data-aos-once="true">
+        <img
+          src="{{ 'images/down.png' | asset_url }}"
+          height="auto"
+          width="80"
+          class="mx-auto"
+        >
+        <h3>Reduce Labor & Streamline Fryer Oil Disposal</h3>
+        <p class="highlight-description">
+          Stop wasting time wrestling with buckets, carts, or makeshift tools. The Shortening Shuttle<sup>®</sup> makes
+          cooking oil removal faster, cleaner, and more efficient—helping kitchens maintain uptime, speed service, and
+          reduce staff fatigue. Ideal for any operation looking to simplify waste oil management and improve
+          back-of-house productivity.
+        </p>
+        <p>{{ 'View the Liquid reference' | link_to: 'https://shopify.dev/docs/api/liquid' }}</p>
+      </div>
+
+      <div class="highlight drop-shadow-xl" data-aos="fade-up" data-aos-delay="400" data-aos-once="true">
+        <img
+          src="{{ 'images/flag.png' | asset_url }}"
+          height="auto"
+          width="80"
+          class="mx-auto"
+        >
+        <h3>American-Built Durability Built for Daily Use</h3>
+        <p class="highlight-description">
+          Invest in equipment that lasts. Proudly made in the USA, the Shortening Shuttle<sup>®</sup> features rugged
+          aluminum construction engineered for demanding commercial environments. It withstands heat, heavy use, and
+          constant movement—delivering long-term reliability, lower replacement costs, and unmatched return on
+          investment.
+        </p>
+        <p>{{ 'Follow best practices' | link_to: 'https://shopify.dev/docs/storefronts/themes/best-practices' }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% stylesheet %}
+  .key-highlights-section {
+    padding: 5rem 2rem;
+  }
+  .key-highlights-section .highlights {
+    margin-top: 3rem;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 1100px) {
+    .key-highlights-section .highlights {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .key-highlights-section .highlight {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 24px;
+    border-radius: 8px;
+    background-color: #eef3ff;
+    line-height: 1.4;
+  }
+
+  .key-highlights-section .highlight > * + * {
+    margin-top: 1rem;
+  }
+
+  .key-highlights-section .highlight h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .key-highlights-section .highlight-description {
+    flex: 1 1;
+  }
+
+  .key-highlights-section .highlight a {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    background-color: #20204b;
+    color: white;
+    border: 1px solid #20204b;
+    border-radius: 5px;
+    padding: 3px 10px 5px;
+    text-decoration: none;
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Key Highlights",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Key Highlights Template",
+      "category": "Shortening Shuttle"
+    }
+  ]
+}
+{% endschema %}

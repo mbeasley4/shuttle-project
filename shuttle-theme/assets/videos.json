@@ -1,0 +1,20 @@
+[
+    {
+        "title": "How to Use the Shortening Shuttle",
+        "type": "youtube",
+        "id": "A5rJ6OrgMnA",
+        "description": "Overview of operation and safety."
+    },
+    {
+        "title": "Transport Demo",
+        "type": "vimeo",
+        "id": "761098077",
+        "description": "Demonstration of safe oil transport."
+    },
+    {
+        "title": "Full Training Video",
+        "type": "mp4",
+        "file": "https://cdn.shopify.com/videos/c/o/v/fc3e23f570a04177b763f028bed6cbc7.mp4",
+        "description": "MP4 hosted through Shopify Files."
+    }
+]

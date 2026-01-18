@@ -1,0 +1,261 @@
+{% comment %}
+  Homepage Hero Slider
+  - Full-width background (min-height 600px)
+  - Centered content (max-width: 1500px)
+  - Background image fills full height
+  - Fade transition
+  - AOS animates text only on slide in
+  - Mobile stack (image top, text bottom)
+  - Desktop arrows only
+  - White arrows & pagination
+{% endcomment %}
+
+<section class="homepage-hero-slider w-full relative">
+  <div class="swiper myHeroSwiper">
+    <div class="swiper-wrapper">
+      {% for block in section.blocks %}
+        <div class="swiper-slide">
+          <!-- FULL WIDTH / FULL HEIGHT BACKGROUND -->
+          <div
+            class="hero-bg has-bg w-full min-h-[600px] flex items-center"
+            style="
+              {% if block.settings.background_image %}
+                background-image: url({{ block.settings.background_image | img_url: '2000x' }});
+              {% endif %}
+            "
+          >
+            <!-- CENTERED CONTENT -->
+            <div
+              class="
+                welcome-content
+                w-full
+                max-w-[1500px] mx-auto
+                px-6 lg:px-28
+                py-12 lg:py-20
+                flex flex-col lg:flex-row
+                items-center justify-between gap-10
+                relative
+              "
+              style="color: {{ block.settings.text_color }};"
+            >
+              <!-- IMAGE (mobile first, desktop last) -->
+              {% if block.settings.hero_image %}
+                <div
+                  class="icon w-[400px] sm:w-[300px] mx-auto lg:mx-0 order-1 lg:order-2 relative z-10"
+                  data-aos="fade-down"
+                  data-aos-duration="900"
+                  data-aos-delay="100"
+                >
+                  <img
+                    src="{{ block.settings.hero_image | img_url: '900x' }}"
+                    alt="{{ block.settings.title | escape }}"
+                    class="w-full h-auto object-contain select-none"
+                  >
+                </div>
+              {% endif %}
+
+              <!-- TEXT -->
+              <div
+                class="flex-1 text-center lg:text-left order-2 lg:order-1 slide-text-wrapper relative z-10"
+              >
+                {% if block.settings.title %}
+                  <h1 data-aos="fade-up" data-aos-duration="800" data-aos-delay="150">
+                    {{ block.settings.title | remove: '<p>' | remove: '</p>' }}
+                  </h1>
+                {% endif %}
+
+                {% if block.settings.subtitle %}
+                  <h2 data-aos="fade-up" data-aos-duration="900" data-aos-delay="300">
+                    {{ block.settings.subtitle | remove: '<p>' | remove: '</p>' }}
+                  </h2>
+                {% endif %}
+
+                {% if block.settings.description %}
+                  <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="450">
+                    {{ block.settings.description }}
+                  </div>
+                {% endif %}
+
+                <!-- CTAs -->
+                {% if block.settings.primary_cta_label or block.settings.secondary_cta_label %}
+                  <div
+                    class="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+                    data-aos="fade-up"
+                    data-aos-duration="1100"
+                    data-aos-delay="600"
+                  >
+                    {% if block.settings.primary_cta_label and block.settings.primary_cta_link %}
+                      <a
+                        href="{{ block.settings.primary_cta_link }}"
+                        class="
+                          inline-block rounded-sm
+                          bg-white text-gray-900
+                          px-8 py-4
+                          text-sm font-semibold uppercase tracking-wide
+                          hover:bg-gray-100
+                          transition-colors duration-200
+                        "
+                      >
+                        {{ block.settings.primary_cta_label }}
+                      </a>
+                    {% endif %}
+
+                    {% if block.settings.secondary_cta_label and block.settings.secondary_cta_link %}
+                      <a
+                        href="{{ block.settings.secondary_cta_link }}"
+                        class="
+                          inline-block rounded-sm
+                          border border-white text-white
+                          px-8 py-4
+                          text-sm font-semibold uppercase tracking-wide
+                          hover:bg-white hover:text-gray-900
+                          transition-colors duration-200
+                        "
+                      >
+                        {{ block.settings.secondary_cta_label }}
+                      </a>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      <!-- Controls -->
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-next custom-nav lg:flex hidden"></div>
+      <div class="swiper-button-prev custom-nav lg:flex hidden"></div>
+    </div>
+  </div>
+</section>
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function () {
+    const heroSwiper = new Swiper('.myHeroSwiper', {
+      loop: true,
+      speed: 1000,
+      effect: 'fade',
+      fadeEffect: { crossFade: true },
+
+      autoplay: {
+        delay: 56000,
+        disableOnInteraction: false,
+      },
+
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+
+      on: {
+        slideChangeTransitionEnd: function () {
+          AOS.refreshHard();
+        },
+      },
+    });
+
+    AOS.init({
+      once: true,
+      duration: 800,
+    });
+  });
+{% endjavascript %}
+
+{% stylesheet %}
+  .hero-bg.has-bg {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+  }
+  .hero-bg.has-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.70);
+    z-index: 1;
+  }
+  .hero-bg > .welcome-content {
+    position: relative;
+    z-index: 2;
+  }
+  .welcome-content h1 {
+    font-size: 3.5rem;
+    font-weight: 400;
+    color: #fff;
+  }
+  .welcome-content h2,
+  .welcome-content p {
+    color: #fff;
+  }
+  .ss-controls {
+    top: 50%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    height: 100%;
+  }
+  .homepage-hero-slider svg.swiper-navigation-icon {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+  }
+
+  @media (min-width: 1024px) {
+    .homepage-hero-slider .swiper-button-next {
+      right: 20px;
+    }
+    .homepage-hero-slider .swiper-button-prev {
+      left: 20px;
+    }
+  }
+
+  /* Pagination dots */
+  .homepage-hero-slider .swiper-pagination-bullet {
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 1;
+  }
+
+  .homepage-hero-slider .swiper-pagination-bullet-active {
+    background: #ffffff !important;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Homepage Hero Slider",
+  "max_blocks": 4,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        { "type": "richtext", "id": "title", "label": "Slide Title" },
+        { "type": "richtext", "id": "subtitle", "label": "Slide Subtitle" },
+        { "type": "richtext", "id": "description", "label": "Description" },
+        { "type": "image_picker", "id": "hero_image", "label": "Right-side Image" },
+        { "type": "image_picker", "id": "background_image", "label": "Background Image" },
+        { "type": "color", "id": "text_color", "label": "Text Color", "default": "#ffffff" },
+
+        { "type": "text", "id": "primary_cta_label", "label": "Primary CTA Label", "default": "View Product" },
+        { "type": "url", "id": "primary_cta_link", "label": "Primary CTA Link" },
+
+        { "type": "text", "id": "secondary_cta_label", "label": "Secondary CTA Label", "default": "View Specs" },
+        { "type": "url", "id": "secondary_cta_link", "label": "Secondary CTA Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Slider",
+      "category": "Homepage"
+    }
+  ]
+}
+{% endschema %}

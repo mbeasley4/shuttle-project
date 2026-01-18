@@ -1,0 +1,153 @@
+{% comment %}
+  Videos Grid Section (JSON from assets/videos.json)
+  - Supports YouTube, Vimeo, MP4
+  - Tailwind grid layout
+  - Optional AOS animation
+  - Full client-side JSON loading
+{% endcomment %}
+<!-- HERO -->
+<div class="bg-gray-900 text-black py-24 px-6 text-center interior-hero">
+  <h1 class="text-5xl font-extrabold mb-6 tracking-tight">{{ page.title }}</h1>
+</div>
+<section class="videos-grid-section py-12 px-6">
+  <div class="container">
+    {% if section.settings.show_heading %}
+      <h1 class="text-4xl font-bold text-gray-900 mb-10 text-center">
+        {{ section.settings.heading }}
+      </h1>
+    {% endif %}
+
+    <!-- GRID CONTAINER -->
+    <div id="videos-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <!-- SKELETON LOADING CARDS -->
+      {% for i in (1..6) %}
+        <div class="bg-gray-200 animate-pulse h-64 rounded-2xl"></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- FETCH JSON + RENDER VIDEO CARDS -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  fetch('{{ "videos.json" | asset_url }}')
+    .then(response => response.json())
+    .then(videos => {
+      const container = document.getElementById("videos-grid");
+      container.innerHTML = ""; // remove skeletons
+      videos.forEach((video, index) => {
+        let embed = "";
+        console.log(video);
+        switch (video.type) {
+          case "youtube":
+            embed = `
+              <iframe
+                src="https://www.youtube.com/embed/${video.id}"
+                class="w-full h-full"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>`;
+            break;
+
+          case "vimeo":
+            embed = `
+              <iframe
+                src="https://player.vimeo.com/video/${video.id}"
+                class="w-full h-full"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>`;
+            break;
+
+          case "mp4":
+            embed = `
+              <video class="w-full h-full object-cover" controls preload="metadata">
+                <source src="${video.file}" type="video/mp4">
+              </video>`;
+            break;
+
+          default:
+            embed = `<div class="p-4 text-red-600">Unsupported video type: ${video.type}</div>`;
+        }
+
+        // Build video card
+        const cardHTML = `
+          <div 
+            class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all">
+            <div class="aspect-video w-full bg-black">
+              ${embed}
+            </div>
+
+            <div class="p-6">
+              <h2 class="text-xl font-semibold text-gray-900 mb-2">
+                ${video.title}
+              </h2>
+              ${video.description ? `<p class="text-gray-600 text-sm">${video.description}</p>` : ""}
+            </div>
+          </div>
+        `;
+
+        container.insertAdjacentHTML("beforeend", cardHTML);
+      });
+
+      // Init AOS if enabled
+      {% if section.settings.enable_aos %}
+        if (typeof AOS !== "undefined") {
+          AOS.init({
+            duration: 700,
+            easing: "ease-out-quart",
+            once: true
+          });
+        }
+      {% endif %}
+    })
+    .catch(err => {
+      console.error("Error loading videos.json:", err);
+      document.getElementById("videos-grid").innerHTML =
+        "<p class='text-red-600 text-center'>Failed to load videos.</p>";
+    });
+});
+</script>
+
+{% stylesheet %}
+  .videos-grid-section .container {
+    max-width: 1600px;
+    padding: 0 2rem;
+    margin: 0 auto;
+  }
+  .videos-grid-section .container h2 {
+    font-size: 1.6rem;
+    line-height: 1.125;
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Videos Grid (Asset JSON)",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "Show Heading",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Videos"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_aos",
+      "label": "Enable AOS Animations",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Videos Grid (Asset JSON)",
+      "category": "Media"
+    }
+  ]
+}
+{% endschema %}

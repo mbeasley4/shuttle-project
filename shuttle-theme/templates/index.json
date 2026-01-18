@@ -1,0 +1,123 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "ss-homepage",
+      "blocks": {
+        "slide_WkRxdL": {
+          "type": "slide",
+          "settings": {
+            "title": "<p>The <strong>BOSS</strong></p>",
+            "subtitle": "<p>Battery Operated Shortening Shuttle</p>",
+            "description": "<p>The Ultimate Cordless Fryer Oil Transporter & Oil Filter Machine in One!</p>",
+            "hero_image": "shopify://shop_images/theboss-hero.png",
+            "background_image": "shopify://shop_images/about-hero.png",
+            "text_color": "#ffffff",
+            "primary_cta_label": "View Product",
+            "primary_cta_link": "shopify://products/the-boss",
+            "secondary_cta_label": "View Specs",
+            "secondary_cta_link": ""
+          }
+        },
+        "slide_jTzVLw": {
+          "type": "slide",
+          "settings": {
+            "title": "<p>Model SS-611</p>",
+            "subtitle": "<p><strong>Economy Series </strong></p>",
+            "description": "<p>Five different models allow the <strong>Economy Series Shortening Shuttle®</strong> to be used with virtually all fryers and in all locations.</p>",
+            "hero_image": "shopify://shop_images/ss-611-hero.png",
+            "background_image": "shopify://shop_images/slide-2-v2.png",
+            "text_color": "#ffffff",
+            "primary_cta_label": "View the Series",
+            "primary_cta_link": "shopify://collections/economy-series",
+            "secondary_cta_label": "View Specs",
+            "secondary_cta_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_WkRxdL",
+        "slide_jTzVLw"
+      ],
+      "settings": {}
+    },
+    "ss_key_highlights_BQ4qcx": {
+      "type": "ss-key-highlights",
+      "name": "Key Highlights Template",
+      "settings": {}
+    },
+    "video_GhGFDn": {
+      "type": "video",
+      "name": "t:sections.video.name",
+      "settings": {
+        "vid": "",
+        "image_background": "shopify://shop_images/Screenshot_2025-02-18_at_5.54.18_PM.png",
+        "video_background": "shopify://files/videos/Shortening_Shuttle_Boss_Product_4k.mp4",
+        "auto_play": true,
+        "heading": "Introducing The BOSS: Cordless Fryer Oil Transporter & Filtration System",
+        "content": "<p><strong>The BOSS </strong>is a cordless fryer oil transporter and oil filter machine from the trusted Shortening Shuttle® line. Built for safe, efficient, and portable restaurant oil management, it streamlines the filtration and disposal of waste cooking oil in commercial kitchens and institutional facilities.</p>",
+        "button_label": "Button",
+        "button_url": "/",
+        "spacing_top": 100,
+        "spacing_bottom": 100,
+        "color_scheme": "color__bg-overlay-1 color__text",
+        "color_border": "color__border-divider-1",
+        "color_button": "btn btn--secondary",
+        "style_border": "border--b-width",
+        "layout_x_alignment": "justify-between",
+        "aspect_ratio": "aspect-video",
+        "visibility": ""
+      }
+    },
+    "testimonials_slider_PXfLqt": {
+      "type": "testimonials-slider",
+      "name": "Testimonials Slider",
+      "settings": {
+        "heading": "What Our Customers Say"
+      }
+    },
+    "product_grid_CMUGpc": {
+      "type": "product-grid",
+      "name": "t:sections.product_grid.name",
+      "settings": {
+        "collection": "frontpage",
+        "products_count": 7,
+        "heading": "The Shortening Shuttle®: A Fryer Oil Transporter Built for Efficiency",
+        "content": "<p>The Shortening Shuttle® is a must-have solution for commercial kitchens, designed to simplify and streamline restaurant oil management. This ergonomically engineered fryer oil transporter works seamlessly with existing oil filtration systems, functioning as a dependable oil filter machine. Ideal for handling and dispensing cooking shortening or used oil, it enhances kitchen safety and efficiency across restaurants, food trucks, and institutional kitchens.</p>",
+        "button_label": "",
+        "button_url": "/collections/all",
+        "spacing_top": 100,
+        "spacing_bottom": 100,
+        "color_scheme": "color__bg-overlay-1 color__text",
+        "color_border": "color__border-divider-1",
+        "color_button": "btn btn--secondary",
+        "style_border": "border--b-width",
+        "row_size_desktop": "md:grid-cols-4",
+        "row_size_mobile": "grid grid-cols-2",
+        "layout_x_alignment": "justify-between",
+        "visibility": ""
+      }
+    },
+    "ss_highlights_4YbdLG": {
+      "type": "ss-highlights",
+      "name": "Highlights Template",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "ss_key_highlights_BQ4qcx",
+    "video_GhGFDn",
+    "testimonials_slider_PXfLqt",
+    "product_grid_CMUGpc",
+    "ss_highlights_4YbdLG"
+  ]
+}

@@ -1,0 +1,156 @@
+{% comment %}
+  Modern Tailwind Table Cart — SEO Friendly + Premium Styling
+{% endcomment %}
+
+<div class="min-h-screen container mx-auto px-6 py-10">
+  <h1 class="text-3xl font-bold mb-8 text-gray-900">{{ 'cart.title' | t }}</h1>
+
+  {% if cart.items.size == 0 %}
+    <p class="text-gray-600 text-lg">Your cart is empty.</p>
+  {% else %}
+    <form action="{{ routes.cart_url }}" method="post" class="space-y-10">
+      <!-- CART TABLE -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full cart-table">
+          <thead>
+            <tr class="bg-gray-100 text-gray-700 text-left text-sm uppercase tracking-wide">
+              <th class="px-4 py-3 rounded-tl-xl">Product</th>
+              <th class="px-4 py-3">Price</th>
+              <th class="px-4 py-3">Quantity</th>
+              <th class="px-4 py-3 rounded-tr-xl">Total</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for item in cart.items %}
+              <tr class="bg-white shadow-sm rounded-xl cart-row">
+                <!-- PRODUCT -->
+                <td class="px-4 py-4 align-top">
+                  <div class="flex items-center gap-4">
+                    <a
+                      href="{{ item.url }}"
+                      class="w-20 h-20 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200"
+                    >
+                      {% render 'image', image: item.image, class: 'w-full h-full object-cover' %}
+                    </a>
+                    <div>
+                      <a href="{{ item.url }}" class="text-gray-900 font-semibold hover:text-blue-800">
+                        {{- item.product.title -}}
+                      </a>
+                      {% if item.variant.title != 'Default Title' %}
+                        <p class="text-sm text-gray-500">{{ item.variant.title }}</p>
+                      {% endif %}
+                      <a href="{{ item.url_to_remove }}" class="text-sm text-red-600 hover:underline mt-1 block"
+                        >Remove</a
+                      >
+                    </div>
+                  </div>
+                </td>
+
+                <!-- PRICE -->
+                <td class="px-4 py-4 text-gray-800 font-medium align-top whitespace-nowrap">
+                  {{ item.final_price | money }}
+                </td>
+
+                <!-- QUANTITY -->
+                <td class="px-4 py-4 align-top">
+                  <input
+                    type="number"
+                    min="1"
+                    name="updates[]"
+                    value="{{ item.quantity }}"
+                    class="w-20 border border-gray-300 rounded-lg p-2 text-center focus:ring-2 focus:ring-blue-500"
+                  >
+                </td>
+
+                <!-- LINE TOTAL -->
+                <td class="px-4 py-4 text-gray-900 font-bold align-top whitespace-nowrap">
+                  {{ item.final_line_price | money }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- UPDATE BUTTON -->
+      <div class="flex justify-end">
+        <button
+          type="submit"
+          class="cart-btn-secondary"
+        >
+          Update Cart
+        </button>
+      </div>
+
+      <!-- TOTAL + CHECKOUT -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-6 border-t pt-6">
+        <p class="text-2xl font-semibold text-gray-900">
+          Total: <span class="text-blue-800">{{ cart.total_price | money }}</span>
+        </p>
+
+        <button
+          type="submit"
+          name="checkout"
+          class="cart-btn-primary mt-4 sm:mt-0"
+        >
+          {{ 'cart.checkout' | t }}
+        </button>
+      </div>
+    </form>
+  {% endif %}
+</div>
+
+<!-- INLINE CSS FOR BUTTONS + TABLE STYLE -->
+<style>
+  /* Rounded rows inside table */
+  .cart-table tbody tr.cart-row {
+    border-radius: 14px;
+    border: 1px solid #eeeeee;
+    margin-bottom: 12px;
+    display: table-row;
+  }
+
+  /* Use border-spacing for rounded appearance */
+  .cart-table {
+    border-spacing: 0 1rem;
+  }
+
+  /* Buttons */
+  .cart-btn-primary {
+    background: #1e3a8a;
+    color: white;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+    transition: all 0.2s;
+    border: none;
+  }
+  .cart-btn-primary:hover {
+    background: #1d4ed8;
+  }
+
+  .cart-btn-secondary {
+    background: #374151;
+    color: white;
+    padding: 12px 26px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+    border: none;
+  }
+  .cart-btn-secondary:hover {
+    background: #4b5563;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "t:general.cart",
+  "settings": []
+}
+{% endschema %}

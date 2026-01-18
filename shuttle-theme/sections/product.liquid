@@ -1,0 +1,267 @@
+{% comment %}
+  Modern Tailwind Product Page Layout
+  Left: images + thumbnails
+  Right: title, price, description, form
+{% endcomment %}
+
+<div class="container mx-auto px-6 py-10">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <!-- LEFT SIDE: IMAGES + THUMBNAILS -->
+    <div class="lg:flex lg:gap-6">
+      <!-- Thumbnails - Vertical Rail (Prestige style) -->
+      <div class="hidden lg:flex flex-col gap-4 w-24">
+        {% for image in product.images %}
+          <button
+            onclick="document.getElementById('main-product-image').src='{{ image | image_url: width: 1200 }}'"
+            class="border border-gray-300 rounded-lg overflow-hidden hover:border-blue-500 transition"
+          >
+            <img
+              src="{{ image | image_url: width: 300 }}"
+              width="300"
+              height="auto"
+              alt="{{ image.alt }}"
+              class="w-full h-full object-cover"
+            >
+          </button>
+        {% endfor %}
+      </div>
+
+      <!-- Main Image -->
+      <div class="w-full">
+        {% assign featured = product.featured_image %}
+        <div class="border border-gray-300 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition">
+          <img
+            id="main-product-image"
+            src="{{ featured | image_url: width: 1400 }}"
+            width="1400"
+            height="auto"
+            alt="{{ featured.alt }}"
+            class="w-full object-cover rounded-xl"
+          >
+        </div>
+
+        <!-- Mobile Thumbnails (grid under image) -->
+        <div class="grid grid-cols-4 gap-4 mt-5 lg:hidden">
+          {% for image in product.images %}
+            <button
+              onclick="document.getElementById('main-product-image').src='{{ image | image_url: width: 1200 }}'"
+              class="border border-gray-300 rounded-lg overflow-hidden hover:border-blue-500 transition"
+            >
+              <img
+                src="{{ image | image_url: width: 300 }}"
+                width="300"
+                height="auto"
+                alt="{{ image.alt }}"
+                class="w-full h-full object-cover"
+              >
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE: STICKY PREMIUM BUY BOX -->
+    <div class="space-y-6 lg:sticky lg:top-28 self-start">
+      <!-- Title -->
+      <h1 class="text-4xl font-bold text-gray-900 leading-tight">
+        {{ product.title }}
+      </h1>
+
+      <!-- Review Stars / Trust Badge Placeholder -->
+      <div class="flex items-center gap-2 text-yellow-500">
+        {% if product.metafields.reviews.rating.value %}
+          {% assign rating = product.metafields.reviews.rating.value %}
+          {% for i in (1..rating) %}
+            ★
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <!-- PRICE RANGE LOGIC -->
+      {% assign min_price = product.price_min %}
+      {% assign max_price = product.price_max %}
+      {% assign min_compare = product.compare_at_price_min %}
+      {% assign max_compare = product.compare_at_price_max %}
+
+      <div class="flex items-center gap-3">
+        {% if min_price != max_price %}
+          <!-- Show price range -->
+          <p id="product-price" class="text-3xl font-extrabold text-gray-900">
+            {{ min_price | money }} – {{ max_price | money }}
+          </p>
+        {% else %}
+          <!-- Single price -->
+          <p class="text-3xl font-extrabold text-gray-900">
+            {{ min_price | money }}
+          </p>
+        {% endif %}
+
+        {% if max_compare > max_price %}
+          <p id="product-compare-price" class="text-xl line-through text-gray-400">
+            {{ max_compare | money }}
+          </p>
+        {% endif %}
+      </div>
+
+      <!-- PRODUCT FORM -->
+      <div>
+        {% form 'product', product, class: 'space-y-5' %}
+          {% assign current_variant = product.selected_or_first_available_variant %}
+
+          <!-- Variant Selector -->
+          {% if product.variants.size > 1 %}
+            <label class="font-medium text-gray-800">Select an option</label>
+            <select
+              name="id"
+              class="w-full border border-gray-300 rounded-xl p-3 text-gray-800 focus:ring-2 focus:ring-blue-500 bg-white"
+            >
+              {% for variant in product.variants %}
+                <option
+                  value="{{ variant.id }}"
+                  {% if variant == current_variant %}
+                    selected
+                  {% endif %}
+                >
+                  {{ variant.title }} — {{ variant.price | money }}
+                </option>
+              {% endfor %}
+            </select>
+          {% else %}
+            <input type="hidden" name="id" value="{{ current_variant.id }}">
+          {% endif %}
+
+          <!-- Quantity -->
+          <div class="flex flex-col gap-2">
+            <label class="font-medium text-gray-800">Quantity</label>
+            <input
+              type="number"
+              min="1"
+              value="1"
+              name="quantity"
+              class="w-28 border border-gray-300 rounded-xl p-3 text-center focus:ring-2 focus:ring-blue-500"
+            >
+          </div>
+
+          <!-- Add to Cart Button -->
+          <button
+            type="submit"
+            class="w-full ss-bg-blue hover:bg-blue-600 text-white font-semibold py-4 rounded-xl shadow-lg transition text-lg"
+          >
+            Add to Cart
+          </button>
+
+          <!-- Shopify Payment Button -->
+          <div class="mt-4">
+            {{ form | payment_button }}
+          </div>
+        {% endform %}
+      </div>
+
+      <!-- Premium Divider -->
+      <div class="h-px bg-gray-200 my-6"></div>
+
+      <!-- Description -->
+      <div class="prose prose-gray max-w-none text-gray-700 leading-relaxed ss-product-description">
+        {{ product.description }}
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const priceEl = document.getElementById("product-price");
+    const compareEl = document.getElementById("product-compare-price");
+    const variantSelect = document.querySelector('select[name="id"]');
+
+    if (!variantSelect || !priceEl) {
+      console.warn("Missing price or select element");
+      return;
+    }
+
+    // Direct JSON (no parsing needed)
+    const variants = {{ product.variants | json }};
+
+    variantSelect.addEventListener("change", (e) => {
+      const selectedId = e.target.value;
+      const variant = variants.find(v => String(v.id) === String(selectedId));
+
+      if (!variant) return;
+
+      const formatMoney = (amount) => {
+        return (amount / 100).toLocaleString("en-US", {
+          style: "currency",
+          currency: "{{ cart.currency.iso_code }}",
+        });
+      };
+
+      // --- UPDATE MAIN PRICE ---
+      priceEl.textContent = formatMoney(variant.price);
+
+      // --- UPDATE COMPARE PRICE SAFELY ---
+      if (compareEl) {
+        if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+          compareEl.textContent = formatMoney(variant.compare_at_price);
+          compareEl.classList.remove("hidden");
+        } else {
+          compareEl.classList.add("hidden");
+        }
+      }
+    });
+  });
+</script>
+
+{% stylesheet %}
+  .ss-product-description table tr td {
+    border-bottom: 1px solid #eee;
+  }
+  .ss-product-description table tr td {
+    line-height: 1.1;
+    padding: 0.5rem;
+  }
+  .ss-product-description table h4 {
+    margin-top: 2rem;
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  .callout-for-purchase {
+    background-color: white;
+    border: 1px solid #eee;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* MOBILE STACKING */
+  @media (max-width: 768px) {
+    .callout-for-purchase {
+      flex-direction: column;
+      text-align: center;
+      padding: 1.25rem 1rem;
+      gap: 0.75rem;
+    }
+    .callout-for-purchase p {
+      margin-bottom: 0;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+  }
+  .ss-product-description .callout-for-purchase p {
+    margin-bottom: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.product",
+  "settings": [],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

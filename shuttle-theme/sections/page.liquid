@@ -1,0 +1,101 @@
+{% comment %}
+  Page section with optional hero, hero image, hero title override,
+  and optional side image next to page content.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/page
+{% endcomment %}
+
+<section class="w-full">
+  {% if section.settings.show_hero %}
+    <!-- HERO -->
+    <div
+      class="relative py-24 px-6 text-center interior-hero bg-gray-900"
+      {% if section.settings.hero_image != blank %}
+        style="background-image:url('{{ section.settings.hero_image | image_url: width: 2400 }}'); background-size:cover; background-position:center;"
+      {% endif %}
+    >
+      {% if section.settings.hero_image != blank %}
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-black/40"></div>
+      {% endif %}
+
+      <div class="relative z-10">
+        <h1 class="text-5xl font-extrabold mb-6 tracking-tight text-white">
+          {% if section.settings.hero_title != blank %}
+            {{ section.settings.hero_title }}
+          {% else %}
+            {{ page.title }}
+          {% endif %}
+        </h1>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if page.content != blank %}
+    <!-- CONTENT -->
+    <div class="py-20 px-6 bg-white">
+      <div
+        class="
+          container mx-auto grid gap-12 items-start
+          {% if section.settings.side_image != blank %}
+            md:grid-cols-2
+          {% else %}
+            grid-cols-1
+          {% endif %}
+        "
+      >
+        <!-- TEXT CONTENT -->
+        <div class="prose max-w-none">
+          {{ page.content }}
+        </div>
+
+        {% if section.settings.side_image != blank %}
+          <!-- SIDE IMAGE -->
+          <div>
+            <img
+              src="{{ section.settings.side_image | image_url: width: 1200 }}"
+              alt="{{ section.settings.side_image.alt | escape }}"
+              class="w-full h-auto rounded-lg"
+              loading="lazy"
+            >
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+{% stylesheet %}
+  .container p {
+    margin-bottom: 2rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Page",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_hero",
+      "label": "Show hero section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero title override"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero background image"
+    },
+    {
+      "type": "image_picker",
+      "id": "side_image",
+      "label": "Side image (next to content)"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,119 @@
+{% comment %}
+  Testimonials Grid Section
+  Loads testimonials from assets/testimonials.json
+  Wrapped in 1500px container
+{% endcomment %}
+
+<section class="testimonials-grid-section py-16 px-6">
+  <div class="mx-auto max-w-[1500px]">
+    {% if section.settings.show_heading %}
+      <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">
+        {{ section.settings.heading }}
+      </h2>
+    {% endif %}
+
+    <!-- GRID -->
+    <div id="testimonials-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <!-- Skeleton cards -->
+      {% for i in (1..6) %}
+        <div class="bg-gray-200 animate-pulse rounded-2xl h-64"></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CLIENT-SIDE JSON LOADER -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const ENABLE_AOS = {{ section.settings.enable_aos | json }};
+  const ASSET_BASE_URL = "{{ 'theme.css' | asset_url | split: 'assets/theme.css' | first }}";
+
+  fetch('{{ "testimonials.json" | asset_url }}')
+    .then(response => response.json())
+    .then(items => {
+      const container = document.getElementById("testimonials-grid");
+      container.innerHTML = "";
+
+      items.forEach((item, index) => {
+
+        const aosAttrs = ENABLE_AOS
+          ? `data-aos="fade-up" data-aos-delay="${index * 120}"`
+          : "";
+
+        const imageMarkup = item.image
+          ? `<img src="${ASSET_BASE_URL}${item.image}" class="w-14 h-14 rounded-full object-cover shadow" alt="${item.author || ''}">`
+          : "";
+
+        const cardHTML = `
+          <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-8 flex flex-col gap-4" ${aosAttrs}>
+            <p class="text-gray-700 text-base leading-relaxed">
+              ${item.quote || ""}
+            </p>
+
+            <div class="flex items-center gap-4 pt-4 border-t border-gray-100">
+              ${imageMarkup}
+              <div>
+                <p class="text-sm text-gray-500">
+                  <span class="font-medium">${item.author || ""}</span><br>
+                  ${item.company || ""}
+                </p>
+                <p class="text-xs text-gray-400 mt-1">
+                  ${item.product_model || ""} ${item.season ? "• " + item.season : ""}
+                </p>
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.insertAdjacentHTML("beforeend", cardHTML);
+      });
+
+      if (ENABLE_AOS && typeof AOS !== "undefined") {
+        AOS.refreshHard();
+      }
+    })
+    .catch(err => {
+      console.error("Error loading testimonials.json:", err);
+      document.getElementById("testimonials-grid").innerHTML =
+        "<p class='text-red-600 text-center'>Failed to load testimonials.</p>";
+    });
+});
+</script>
+
+{% if section.settings.enable_aos %}
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Testimonials Grid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "Show Heading",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Customers Say"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_aos",
+      "label": "Enable AOS Scroll Animations",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials Grid (Asset JSON)",
+      "category": "Content"
+    }
+  ]
+}
+{% endschema %}

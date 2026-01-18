@@ -1,0 +1,50 @@
+[
+    {
+        "quote": "We have been using Shortening Shuttle products for the past 8 years at our business. Safe, smart and reliable. Great, great products to help our business run like a well-oiled machine.",
+        "season": "Fall 2024",
+        "product_model": "Economy models",
+        "author": "Gabe S.",
+        "company": "Skip's Hot Dogs and Catering. Atlanta, GA",
+        "image": "assets/images/chef.png"
+    },
+    {
+        "quote": "Really great piece of equipment you guys make. We love it!!!!",
+        "season": "Summer 2024",
+        "product_model": "SS-914-W",
+        "author": "Eddie S.",
+        "company": "Kitchen Manager - Hucks Grill, St Regis Travel Center, MT",
+        "image": "assets/images/person.png"
+    },
+    {
+        "quote": "We <strong>LOVE</strong> the Shortening Shuttle<sup>®</sup>!  It has been great for our needs.   I’ll order another one!",
+        "season": "Spring 2024",
+        "product_model": "SS-645 (Mini with Pump)",
+        "author": "Danielle",
+        "company": "Pat’s Cider Donuts",
+        "image": "assets/images/person.png"
+    },
+    {
+        "quote": "I have used Shortening Shuttles<sup>®</sup> for over ten years and know how wonderful these units are! I am so happy we invested in Shortening Shuttle<sup>®</sup>. I hope to continue to be customer 10 years from now.",
+        "season": "Spring 2024",
+        "product_model": "SS-914-W",
+        "author": "Convenience Store Manager",
+        "company": "Twin Buttes, ND",
+        "image": "assets/images/person.png"
+    },
+    {
+        "quote": "Comes in very handy when transporting grease safely. Easy to maneuver and lift grease into the dumpster with ease. They also sell wheel replacement kits because that's the only part that wears out.",
+        "season": "Fall 2023",
+        "product_model": "Economy models",
+        "author": "Nicole C.",
+        "company": "Food Service Kitchen",
+        "image": "assets/images/chef.png"
+    },
+    {
+        "quote": "We bought this restaurant and found staff hauling hot shortening in metal pails—an accident waiting to happen. We ordered the Shortening Shuttle<sup>®</sup> immediately, and the team was thrilled.",
+        "season": "Fall 2023",
+        "product_model": "Economy models",
+        "author": "Anonymous",
+        "company": "Food Service Kitchen",
+        "image": "assets/images/chef.png"
+    }
+]

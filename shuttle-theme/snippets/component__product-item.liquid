@@ -1,0 +1,61 @@
+{%- comment -%} Bold Tailwind Product Content {%- endcomment -%}
+<!-- Modern Product Card -->
+<div class="group relative w-full gap-2" x-data="{ button_loading: false }">
+  <!-- BADGES -->
+  <div class="absolute top-0 left-0 z-10 flex flex-wrap w-full gap-1 p-2">
+    {% if product.metafields.reviews.rating.value %}
+      {% capture rating %}{{ product.metafields.reviews.rating.value | strip | times: 1 | round: 2 }}{% endcapture %}
+      {% capture badge_content %}
+        {{ rating }}{% render 'component__icon', icon: 'star', size: '12', class: 'ml-1' %}
+      {% endcapture %}
+      {% render 'component__badge', color: 'overlay-2', content: badge_content %}
+    {% endif %}
+
+    {% for tag in product.tags %}
+      {% if tag contains 'badge_' %}
+        {% capture badge_content %}{{ tag | remove: 'badge_' }}{% endcapture %}
+        {% render 'component__badge', color: 'secondary', content: badge_content %}
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- IMAGE BLOCK -->
+  <a href="{{ product.url | within: collection }}" class="flex flex-col p-4">
+    <!-- Main Image -->
+    <div class="overflow-hidden">
+      <div class="w-full aspect-square overflow-hidden rounded-lg">
+        {% if product.featured_image %}
+          {{
+            product.featured_image
+            | image_url: width: 900
+            | image_tag: class: 'w-full h-full object-cover transition duration-300 group-hover:scale-[1.05]'
+          }}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="flex justify-center items-center gap-1 mb-2 flex-col">
+      <!-- TITLE -->
+      <h3 class="text-2xl font-bold text-gray-900 mb-2 leading-tight group-hover:ss-text-blue transition-colors">
+        {{ product.title }}
+      </h3>
+      <!-- PRICE -->
+      {% if product.compare_at_price_max > product.price_min %}
+        <span class="text-md text-gray-400 line-through font-medium">
+          {{ product.compare_at_price_max | money }}
+        </span>
+      {% endif %}
+
+      <!-- Price range -->
+      {% if product.price_varies %}
+        <p class="text-md font-extrabold text-gray-900">
+          {{ product.price_min | money }} - {{ product.price_max | money }}
+        </p>
+      {% else %}
+        <span class="text-md font-extrabold text-gray-900">
+          {{ product.price_min | money }}
+        </span>
+      {% endif %}
+    </div>
+  </a>
+</div>

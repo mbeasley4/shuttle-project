@@ -1,0 +1,117 @@
+{% comment %}
+  This section is used in the collection template to render collection page
+  listing all products within a collection.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+{% endcomment %}
+
+<div class="container mx-auto collection-grid">
+  {% comment %}
+  <!-- remove for now -->
+  <h1 class="text-4xl font-bold tracking-tight text-gray-900 mb-10 text-center">
+    {{ collection.title }}
+  </h1>
+  {% endcomment %}
+
+  {% paginate collection.products by 20 %}
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10"
+    >
+      {% for product in collection.products %}
+        {% if product.title != null %}
+          <div
+            class="group flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden"
+          >
+            <!-- Image Wrapper -->
+            <a href="{{ product.url }}" class="block overflow-hidden">
+              <div class="relative">
+                <img
+                  src="{{ product.featured_image | image_url: height: 300 }}"
+                  alt="{{ product.featured_image.alt }}"
+                  class="w-auto object-cover rounded-t-2xl transition duration-500 group-hover:scale-105"
+                >
+
+                <!-- subtle blue glow -->
+                <div
+                  class="absolute inset-0 bg-blue-500 opacity-0 group-hover:opacity-10 transition duration-500 rounded-t-2xl"
+                ></div>
+              </div>
+            </a>
+
+            <!-- Content -->
+            <div class="p-6 text-center">
+              <a
+                href="{{ product.url }}"
+                class="item-title block text-xl font-semibold text-gray-900 tracking-tight mb-2 group-hover:ss-text-blue transition"
+              >
+                {{ product.title | escape }}
+              </a>
+
+              <!-- subtitle from metafield OR fallback -->
+              {% assign subtitle = product.metafields.descriptors.subtitle
+                | default: product.description
+                | strip_html
+                | truncate: 90
+              %}
+              <p class="text-sm text-gray-500 mb-4">{{ subtitle }}</p>
+
+              <!-- Pricing -->
+              <div class="flex justify-center items-baseline gap-2 mb-2">
+                <span class="text-lg font-bold text-gray-900">
+                  {{ product.price_min | money }}
+                </span>
+
+                {% if product.compare_at_price_max > product.price_min %}
+                  <span class="text-sm line-through text-gray-400">
+                    {{ product.compare_at_price_max | money }}
+                  </span>
+                {% endif %}
+              </div>
+
+              {% if product.price_varies %}
+                <p class="text-xs text-gray-500">From {{ product.price_min | money }}</p>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-12 flex justify-center">
+      {{ paginate | default_pagination }}
+    </div>
+  {% endpaginate %}
+</div>
+{% stylesheet %}
+  .collection-grid {
+    padding: 5rem 2rem;
+    margin: 0 auto;
+  }
+  .collection-grid h1 {
+    font-size: 3rem;
+  }
+
+  .collection-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  }
+  .collection-grid .group img {
+    width: 100%;
+  }
+  @media (max-width: 768px) {
+    .collection-grid h1 {
+      font-size: 2rem;
+    }
+    .collection-grid a.item-title {
+      font-size: 1.2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.collection",
+  "settings": []
+}
+{% endschema %}

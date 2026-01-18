@@ -1,0 +1,44 @@
+<div
+  x-show="openItem === {{ index }}"
+  x-transition
+  class="ss-mega-menu"
+  @mouseenter="openItem = {{ index }}"
+  @mouseleave="openItem = null"
+>
+  <div class="ss-menu-wrapper">
+    {% for child in link.links %}
+      <div class="mega-column">
+        <!-- LEVEL 1 -->
+        <a href="{{ child.url }}" class="mega-menu__heading">
+          {{ child.title }}
+        </a>
+
+        {% if child.links != blank %}
+          <ul class="mega-menu__list">
+            {% for subchild in child.links %}
+              <li class="mega-menu__item">
+                <!-- LEVEL 2 -->
+                <a href="{{ subchild.url }}">
+                  {{ subchild.title }}
+                </a>
+
+                {% if subchild.links != blank %}
+                  <ul class="mega-menu__sublist">
+                    {% for subsub in subchild.links %}
+                      <!-- LEVEL 3 -->
+                      <li>
+                        <a href="{{ subsub.url }}">
+                          {{ subsub.title }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>

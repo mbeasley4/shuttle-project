@@ -1,0 +1,34 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "settings": {
+        "show_hero": true,
+        "hero_title": "",
+        "hero_image": "shopify://shop_images/about-hero.png"
+      }
+    },
+    "testimonials_grid_YKi46m": {
+      "type": "testimonials-grid",
+      "name": "Testimonials Grid (Asset JSON)",
+      "settings": {
+        "show_heading": true,
+        "heading": "What Customers Say",
+        "enable_aos": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "testimonials_grid_YKi46m"
+  ]
+}

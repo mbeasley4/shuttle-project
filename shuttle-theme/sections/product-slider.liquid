@@ -1,0 +1,259 @@
+<!-- sections/product-slider.liquid -->
+{% comment %}
+  Product Slider
+  - Tailwind-first layout
+  - No inline styles
+{% endcomment %}
+ 
+<section
+  class="
+    {{ section.settings.visibility }}
+    {{ section.settings.color_scheme }}
+    {{ section.settings.color_border }}
+    {{ section.settings.style_border }}
+  "
+>
+  <div
+    class="
+      {{ settings.layout_horizontal }}
+      px-0
+      pt-[{{ section.settings.spacing_top }}px]
+      pb-[{{ section.settings.spacing_bottom }}px]
+    "
+  >
+
+    {% render 'component__section-header',
+      container_class: 'px-4' %}
+
+    {% assign slider_size = collections[section.settings.collection].products.size
+      | at_most: section.settings.products_count
+      | minus: 1 %}
+
+    {%- capture slides -%}
+
+      {% for product in collections[section.settings.collection].products
+        limit: section.settings.products_count %}
+
+        <div
+          class="
+            flex-none
+            flex
+            justify-center
+            w-8/12
+            md:w-[26%]
+          "
+          x-bind:data-slide="{{ forloop.index0 }}"
+        >
+          {% render 'component__product-item',
+            product: product,
+            source: 'prod-slider' %}
+        </div>
+
+      {% endfor %}
+
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'card' %}
+
+            {% assign slider_size = collections[section.settings.collection].products.size
+              | at_most: section.settings.products_count %}
+
+            <div
+              class="
+                flex-none
+                flex
+                justify-center
+                w-8/12
+                md:w-[26%]
+                whitespace-normal
+              "
+              x-bind:data-slide="{{ slider_size }}"
+            >
+              {% render 'component__content-item', 
+                background_color: settings.thumbmails_color_scheme,
+                title: block.settings.heading,
+                content: block.settings.content,
+                button_label: block.settings.button_label,
+                url: block.settings.button_url %}
+            </div>
+
+        {% endcase %}
+      {% endfor %}
+
+    {%- endcapture -%}
+
+    {% render 'component__slider',
+      container_class: 'px-4',
+      slider_size: slider_size,
+      slides: slides %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product slider",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_count",
+      "label": "Number of products",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 7
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "spacing_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 300,
+      "step": 20,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "spacing_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 300,
+      "step": 20,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Colors & borders"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "color__bg-body color__text", "label": "Default" },
+        { "value": "color__bg-neutral color__text", "label": "Neutral" },
+        { "value": "color__bg-primary color__primary", "label": "Primary" },
+        { "value": "color__bg-secondary color__secondary", "label": "Secondary" }
+      ],
+      "default": "color__bg-body color__text"
+    },
+    {
+      "type": "select",
+      "id": "color_border",
+      "label": "Border color",
+      "options": [
+        { "value": "color__border-divider-1", "label": "Divider" },
+        { "value": "color__border-selected-1", "label": "Selected" }
+      ],
+      "default": "color__border-divider-1"
+    },
+    {
+      "type": "select",
+      "id": "style_border",
+      "label": "Border style",
+      "options": [
+        { "value": "", "label": "None" },
+        { "value": "border--t-width", "label": "Top" },
+        { "value": "border--b-width", "label": "Bottom" },
+        { "value": "border--b-width border--t-width", "label": "Top & bottom" }
+      ],
+      "default": "border--b-width"
+    },
+    {
+      "type": "header",
+      "content": "Visibility"
+    },
+    {
+      "type": "select",
+      "id": "visibility",
+      "label": "Visibility",
+      "options": [
+        { "value": "", "label": "Show on all devices" },
+        { "value": "md:hidden", "label": "Mobile only" },
+        { "value": "hidden md:block", "label": "Desktop only" }
+      ],
+      "default": ""
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Content card",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Block heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Describe a product, make announcements, or promote a collection.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Learn more"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button link",
+          "default": "/collections/all"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product slider",
+      "settings": {
+        "collection": "frontpage",
+        "products_count": 7
+      }
+    }
+  ],
+  "disabled_on": {
+    "groups": ["custom.overlay"]
+  }
+}
+{% endschema %}

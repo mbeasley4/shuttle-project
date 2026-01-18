@@ -1,0 +1,52 @@
+<div
+  class="dropdown absolute left-0 top-full mt-2 w-56 bg-white"
+  x-show="openItem === {{ index }}"
+  x-transition.opacity.duration.200ms
+  x-cloak
+>
+  <ul class="py-2 dropdown--shadow">
+    <div class="dropdown__chevron"></div>
+    {% for child_link in link.links %}
+      <li class="relative group">
+        {% if child_link.links != blank %}
+          <button
+            class="dropdown__child w-full text-left px-4 py-2 flex justify-between items-center"
+            @mouseenter="nested = {{ forloop.index }};"
+            @mouseleave="nested = null"
+            x-data="{ nested: null }"
+          >
+            {{ child_link.title }}
+            <span class="ml-1">&rsaquo;</span>
+          </button>
+
+          <div
+            class="dropdown--shadow dropdown__submenu absolute left-full border border-gray-200"
+            x-show="nested === {{ forloop.index }}"
+            x-transition.opacity.duration.200ms
+            x-cloak
+          >
+            <ul>
+              {% for grandchild_link in child_link.links %}
+                <li class="w-full">
+                  <a
+                    href="{{ grandchild_link.url }}"
+                    class="dropdown__grandchild block px-2 py-2 w-full hover:bg-gray-100"
+                  >
+                    {{ grandchild_link.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% else %}
+          <a
+            href="{{ child_link.url }}"
+            class="dropdown__child block px-2 py-2 w-full hover:bg-gray-100"
+          >
+            {{ child_link.title }}
+          </a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</div>

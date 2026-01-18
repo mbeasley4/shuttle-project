@@ -1,0 +1,135 @@
+<!-- snippets/component__content-item.liquid -->
+{% comment %} 
+  Thumbnail for simple content in a product or collection grid.
+  Accepts:
+    - background_color: set background color
+    - url: url to link to
+    - title: string for title
+    - content: string for content text
+    - button_label: string for button label
+    - index: where to place item in a grid
+    - size_desktop: how wide the block spans on desktop
+    - size_mobile: how wide the block spans on mobile
+  
+  Usage:
+    {% render 'component__content-item',
+      background_color: settings.thumbmails_color_scheme,
+      url: block.settings.url,
+      title: block.settings.heading,
+      content: block.settings.content,
+      button_label: block.settings.button_label, 
+      index: gridIndex %}
+  
+  Globals:
+    - settings.thumbnails_color_border: border color
+    - settings.thumbmails_color_scheme: color scheme of thumbnails
+    - settings.enable_animations: boolean to enable animations
+    - settings.type_thumbnail: typography for thumbnail titles
+    - settings.type_thumbnail_capitilization: set the capitilization for thumbnail titles
+  
+  Possible enhancements: 
+    - Add support to change background color.
+    - Add support to include background image or video. 
+    - Merge component with component__card.
+  
+  Pro tips:
+    - Use this snippet to display promotional content within a product or collection grid.
+{% endcomment %}
+
+<!-- snippets/component__content-item.liquid -->
+{% comment %}
+  Tailwind-first content card
+{% endcomment %}
+
+<a
+  href="{{ url }}"
+  class="
+    group
+    relative
+    flex
+    flex-col
+    w-full
+    min-h-[300px]
+    overflow-hidden
+    rounded-md
+    border
+    no-underline
+    transition
+    hover:no-underline
+    {{ size_desktop }}
+    {{ size_mobile }}
+    {{ background_color }}
+    {{ settings.thumbnails_color_border }}
+    {% if background_image %}
+      justify-start
+    {% else %}
+      justify-end
+    {% endif %}
+  "
+>
+
+  {%- unless background_image == blank -%}
+    <div class="aspect-video w-full overflow-hidden">
+      {{ background_image
+        | image_url: width: 600
+        | image_tag:
+          class: 'w-full h-full object-cover transition-transform duration-300 group-hover:scale-105',
+          loading: 'lazy',
+          alt: background_image.alt
+      }}
+    </div>
+  {%- endunless -%}
+
+  <div
+    class="
+      flex
+      flex-col
+      gap-3
+      p-4
+      {% if background_image %}
+        grow
+      {% endif %}
+      {{ settings.thumbnail_alignment }}
+    "
+  >
+    <h3
+      class="
+        text-lg
+        font-semibold
+        leading-snug
+        text-current
+        {{ settings.type_thumbnail_capitilization }}
+      "
+    >
+      {{ title }}
+    </h3>
+
+    <div class="text-sm text-current/80 line-clamp-3">
+      {{ content | strip_html }}
+    </div>
+
+    {%- unless button_label == blank -%}
+      <span
+        class="
+          mt-auto
+          inline-flex
+          items-center
+          justify-center
+          rounded
+          border
+          px-4
+          py-2
+          text-sm
+          font-medium
+          transition
+          hover:bg-black
+          hover:text-white
+          md:w-auto
+          w-full
+        "
+      >
+        {{ button_label }}
+      </span>
+    {%- endunless -%}
+  </div>
+</a>

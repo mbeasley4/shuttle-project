@@ -1,0 +1,460 @@
+<header id="site-header" x-data="{ mobileOpen: false }">
+  <!-- ============================= -->
+  <!-- EYEBROW BAR -->
+  <!-- ============================= -->
+  <div id="eyebrow" class="eyebrow">
+    <div class="container justify-end md:justify-between">
+      <div class="announcement hidden md:block">
+        The Shortening Shuttle<sup>®</sup> is proudly <span>Made in the USA</span>
+        <img
+          src="{{ 'images/made-in-usa.png' | asset_url }}"
+          width="50"
+          height="26"
+          style="display:inline-block;"
+        >
+      </div>
+
+      <div class="header__icons flex items-center">
+        <a
+          href="{{ routes.cart_url }}"
+          class="header-icon {% if cart.item_count > 0 %}cart-has-items{% endif %}"
+        >
+          {{ 'icon-truck.svg' | inline_asset_content }}
+
+          {% if cart.item_count > 0 %}
+            <span class="cart-count-badge">{{ cart.item_count }}</span>
+          {% endif %}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- MAIN NAVIGATION HEADER -->
+  <!-- ============================= -->
+  <div class="navigation">
+    <!-- MOBILE MENU BUTTON -->
+    <button
+      class="lg:hidden mobile-menu-button flex items-center justify-center w-10 h-10"
+      @click="mobileOpen = true"
+      aria-label="Open Menu"
+    >
+      {% render 'icon-hamburger' %}
+    </button>
+
+    <!-- LOGO -->
+    <div class="header__logo">
+      <a href="/">
+        {{
+          section.settings.logo_light
+          | image_url: width: 180
+          | image_tag: class: '!bg-transparent object-contain', alt: section.settings.logo_light.alt
+        }}
+      </a>
+    </div>
+
+    <!-- DESKTOP NAVIGATION -->
+    <nav
+      class="desktop-nav hidden lg:block relative"
+      x-data="{ openItem: null }"
+    >
+      <ul class="flex gap-8 items-center">
+        {% for link in section.settings.menu.links %}
+          <li
+            class="nav-item relative"
+            @mouseenter="openItem = {{ forloop.index }}"
+            @mouseleave="openItem = null"
+          >
+            <div class="nav-hover-zone">
+              {% if link.links != blank %}
+                <button
+                  class="nav__parent flex items-center gap-1"
+                  @click="openItem = openItem === {{ forloop.index }} ? null : {{ forloop.index }}"
+                  :aria-expanded="openItem === {{ forloop.index }}"
+                >
+                  {{ link.title }}
+                  <span class="inline-block ss-arrow">
+                    {% render 'chevron-down' %}
+                  </span>
+                </button>
+
+                {% render 'menu-mega', link: link, index: forloop.index %}
+
+              {% else %}
+                <a href="{{ link.url }}" class="nav__link">
+                  {{ link.title }}
+                </a>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+
+  <!-- =============================== -->
+  <!-- MOBILE SLIDE-IN MENU -->
+  <!-- =============================== -->
+  <div
+    class="fixed inset-0 z-50 bg-black bg-opacity-50 lg:hidden"
+    x-show="mobileOpen"
+    x-transition.opacity
+    @click.self="mobileOpen = false"
+  >
+    <div
+      class="absolute left-0 top-0 h-full w-80 bg-white shadow-2xl p-6 overflow-y-auto"
+      x-transition:enter="transform transition ease-out duration-300"
+      x-transition:enter-start="-translate-x-full"
+      x-transition:enter-end="translate-x-0"
+      x-transition:leave="transform transition ease-in duration-200"
+      x-transition:leave-start="translate-x-0"
+      x-transition:leave-end="-translate-x-full"
+    >
+      <!-- CLOSE BUTTON -->
+      <div class="flex justify-between items-center mb-6">
+        <span class="text-xl font-bold">Menu</span>
+        <button @click="mobileOpen = false" aria-label="Close Menu">
+          {% render 'icon-close' %}
+        </button>
+      </div>
+
+      <!-- MOBILE NAVIGATION -->
+      <ul class="flex flex-col space-y-4">
+        {% for link in section.settings.menu.links %}
+          <li x-data="{ open: false }">
+            {% if link.links != blank %}
+              <!-- LEVEL 1 WITH CHILDREN -->
+              <button
+                class="flex justify-between items-center w-full text-left font-medium text-gray-800"
+                @click="open = !open"
+              >
+                <span>{{ link.title }}</span>
+                <span :class="open ? 'rotate-180' : ''" class="transition">
+                  {% render 'chevron-down' %}
+                </span>
+              </button>
+
+              <!-- LEVEL 2 WRAPPER -->
+              <ul
+                x-show="open"
+                x-transition
+                class="mt-2 ml-4 space-y-3 border-l border-gray-200 pl-4 text-gray-700"
+              >
+                {% for child in link.links %}
+                  <li x-data="{ open2: false }">
+                    {% if child.links != blank %}
+                      <!-- LEVEL 2 WITH CHILDREN -->
+                      <button
+                        class="flex justify-between items-center w-full text-left font-medium text-gray-700"
+                        @click="open2 = !open2"
+                      >
+                        <span>{{ child.title }}</span>
+                        <span :class="open2 ? 'rotate-180' : ''" class="transition">
+                          {% render 'chevron-down' %}
+                        </span>
+                      </button>
+
+                      <!-- LEVEL 3 WRAPPER -->
+                      <ul
+                        x-show="open2"
+                        x-transition
+                        class="mt-2 ml-4 space-y-2 border-l border-gray-200 pl-4 text-gray-600"
+                      >
+                        {% for subchild in child.links %}
+                          <li>
+                            <a
+                              href="{{ subchild.url }}"
+                              class="block py-1 hover:text-gray-900"
+                            >
+                              {{ subchild.title }}
+                            </a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+
+                    {% else %}
+                      <!-- LEVEL 2 SIMPLE LINK -->
+                      <a
+                        href="{{ child.url }}"
+                        class="block font-medium text-gray-700 hover:text-gray-900"
+                      >
+                        {{ child.title }}
+                      </a>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+
+            {% else %}
+              <!-- LEVEL 1 SIMPLE LINK -->
+              <a
+                href="{{ link.url }}"
+                class="block font-medium text-gray-800 py-1 hover:text-blue-700"
+              >
+                {{ link.title }}
+              </a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</header>
+
+<!-- ===================================== -->
+<!-- POSITIONING + MEGA MENU BEHAVIOR -->
+<!-- ===================================== -->
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const eyebrow = document.getElementById('eyebrow');
+    const header = document.getElementById('site-header');
+    const megaMenus = document.querySelectorAll('.ss-mega-menu');
+
+    function updateMegaPosition() {
+      const eyebrowHeight = eyebrow ? eyebrow.offsetHeight : 0;
+      const navHeight = header.querySelector('.navigation').offsetHeight;
+      const totalOffset = eyebrowHeight + navHeight;
+
+      megaMenus.forEach((menu) => {
+        menu.style.top = `${totalOffset - 1}px`;
+      });
+
+      document.body.style.paddingTop = `${totalOffset}px`;
+    }
+
+    updateMegaPosition();
+    window.addEventListener('resize', updateMegaPosition);
+  });
+</script>
+
+{% stylesheet %}
+  /*********************************************************
+ EYEBROW BAR
+**********************************************************/
+  #eyebrow {
+    width: 100%;
+    background: #20204b;
+    color: white;
+    z-index: 1200;
+    transition: transform 0.3s ease;
+  }
+
+  #eyebrow .container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0.5rem 2rem;
+    display: flex;
+    align-items: center;
+  }
+
+  /*********************************************************
+ FIXED HEADER BELOW EYEBROW
+**********************************************************/
+  #site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1100;
+    background: #ffffff;
+  }
+
+  .navigation {
+    display: flex;
+    height: 5rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    background: #ffffff;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  /*********************************************************
+ APPLE-STYLE HOVER BUFFER ZONE
+**********************************************************/
+  .nav-hover-zone {
+    position: relative;
+  }
+
+  .nav-hover-zone::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 20px; /* invisible hover bridge */
+    background: transparent;
+    pointer-events: auto;
+  }
+
+  /*********************************************************
+ MEGA MENU — FULL WIDTH, NO FLICKER
+**********************************************************/
+  .ss-mega-menu {
+    position: fixed;
+    left: 0;
+    width: 100vw;
+    background: #ffffff;
+    border: none;
+    padding-top: 1px; /* gap fix */
+    z-index: 1000;
+
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .ss-mega-menu:not([style*='display: none']) {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  /*********************************************************
+ MEGA MENU GRID
+**********************************************************/
+  .ss-menu-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3rem;
+  }
+
+  /*********************************************************
+ MENU LEVELS
+**********************************************************/
+  .mega-menu__heading {
+    display: block;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #111;
+    text-decoration: none;
+  }
+
+  .mega-menu__item > a {
+    font-size: 0.95rem;
+    color: #444;
+    text-decoration: none;
+  }
+
+  .mega-menu__item > a:hover {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  .mega-menu__list {
+    margin-top: 0.25rem;
+    padding-left: 1rem;
+    border-left: 1px solid #e5e7eb;
+  }
+
+  .mega-menu__list a {
+    font-size: 1rem;
+    color: #666;
+    text-decoration: none;
+  }
+
+  .mega-menu__list a:hover {
+    color: #111;
+    text-decoration: underline;
+  }
+
+  /*********************************************************
+ CHEVRON ANIMATION
+**********************************************************/
+  .ss-arrow {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+  }
+
+  .nav__parent[aria-expanded='true'] .ss-arrow {
+    transform: rotate(180deg);
+  }
+
+  /*****************************************************
+ HEADER ICONS (ACCOUNT + CART)
+*****************************************************/
+  .header__icons .header-icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .header__icons .header-icon svg path {
+    fill: white;
+  }
+
+  .header__icons .header-icon:hover {
+    opacity: 0.75;
+  }
+
+  /*****************************************************
+ CART BADGE (When Items Are In Cart)
+*****************************************************/
+  .cart-count-badge {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background: #ff3b30; /* Apple-style red badge */
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+
+  /*****************************************************
+ OPTIONAL: Hover scaling for premium feel
+*****************************************************/
+  .header-icon:hover {
+    transform: scale(1.08);
+  }
+
+  .mobile-menu-button svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .cart-count-badge {
+    position: absolute;
+    top: -4px;
+    right: -8px;
+    background: #ff3b30;
+    color: white;
+    font-size: 0.7rem;
+    line-height: 1;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "image_picker", "id": "logo_light", "label": "Logo" },
+    { "type": "link_list", "id": "menu", "label": "Menu" }
+  ]
+}
+{% endschema %}
