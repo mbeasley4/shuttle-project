@@ -13,7 +13,7 @@
       {% if article.image %}
         {{ article.image | image_url: width: 1000 | image_tag }}
       {% endif %}
-      <h2>
+      <h2 class="text-3xl md:text-5xl">
         {{ article.title | link_to: article.url }}
       </h2>
       {% assign date = article.published_at | time_tag: format: 'date' %}

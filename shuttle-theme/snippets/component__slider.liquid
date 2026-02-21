@@ -1,135 +1,140 @@
 <!-- snippets/component__slider.liquid -->
-{% comment %} 
-  Standard slider component.
-
-  Accepts:
-    - show_arrows: boolean to show arrows, if false then arrows may be shown if needed
-    - outer_class: classes to be applied to outer div
-    - container_class: classes to be applied to inner div
-    - slider_size: count of slides
-    - slides: liquid object of slider content
-  
-  Usage:
-    {%- capture slides -%}
-      {% for block in section.blocks %}
-        ...
-      {% endfor %}
-    {%- endcapture -%}
-    {% render 'component__slider',
-      show_arrows: true,
-      outer_class: 'px-4',
-      container_class: 'px-4',
-      slider_size: section.blocks.size,
-      slides: slides %} 
-  
-  Possible enhancements: 
-    - Fix bug where users may have to click twice at end of slider.
-{% endcomment %}
-
-<div class="flex flex-wrap
-  {{ outer_class }}">
-  <div class="relative w-full"
+<div class="flex flex-wrap {{ outer_class }}">
+  <div
+    class="relative w-full"
     x-data="{
       index: 0,
       index_size: {{ slider_size }},
       show_arrows: false,
-      isOverflown(element) {
-        return element.scrollWidth > element.clientWidth;
+
+      slides() {
+        return this.$refs.slider.querySelectorAll('[data-slide]');
       },
 
-      scrollToIndex(index_scroll) {
-        let slider = this.$refs.slider;
-        let currentSlide = slider.querySelector('[data-slide=&quot;' + index_scroll + '&quot;]');
-        if (currentSlide) {
-          let sliderWidth = slider.offsetWidth;
-          let currentSlidePosition = currentSlide.offsetLeft;
-          let currentSlideWidth = currentSlide.offsetWidth;
-          let centerPosition = currentSlidePosition + currentSlideWidth / 2 - sliderWidth / 2;
-      
-          slider.scrollTo({
-            top: 0,
-            left: centerPosition,
-            behavior: 'smooth'
-          });
-        }
+      updateOverflow() {
+        this.$nextTick(() => {
+          const el = this.$refs.slider;
+          this.show_arrows = el.scrollWidth > el.clientWidth + 20;
+        });
       },
+
+      scrollToIndex(i) {
+        const slider = this.$refs.slider;
+        const slide = this.slides()[i];
+        if (!slide) return;
+
+        const maxScroll =
+          slider.scrollWidth - slider.clientWidth;
+
+        const target = Math.min(slide.offsetLeft, maxScroll);
+
+        slider.scrollTo({
+          left: target,
+          behavior: 'smooth'
+        });
+
+        this.index = i;
+      },
+
 
       scrollNext() {
-        let slider = this.$refs.slider;
-        let scrolledToEnd = (el) => {
-          if(el.scrollLeft + el.offsetWidth == el.scrollWidth){
-            return true;
-          } else {
-            return false;
-          } 
-        }
-        
-        if(this.index >= this.index_size || scrolledToEnd(slider)){
-          this.index = 0
-          this.scrollToIndex(0);
-        } else {
-          this.index++
-          this.scrollToIndex(this.index);
-        }
+        this.scrollToIndex(this.index < this.index_size ? this.index + 1 : 0);
       },
-      
+
       scrollBack() {
-        let slider = this.$refs.slider;
-        if(this.index <= 0 || slider.scrollLeft == 0){
-          this.index = this.index_size;
-          this.scrollToIndex(this.index);
-        } else {
-          this.index--
-          this.scrollToIndex(this.index);
-        }
+        this.scrollToIndex(this.index > 0 ? this.index - 1 : this.index_size);
+      },
+
+      syncIndex() {
+        const slider = this.$refs.slider;
+        let closest = 0;
+        let dist = Infinity;
+
+        this.slides().forEach((slide, i) => {
+          const d = Math.abs(slide.offsetLeft - slider.scrollLeft);
+          if (d < dist) {
+            dist = d;
+            closest = i;
+          }
+        });
+
+        this.index = closest;
       }
-    }">
-    
-    {%- comment -%}slides{%- endcomment -%}
-    <div class="whitespace-nowrap md:snap-x scroll-smooth hidescrollbar inline-flex w-full px-4 overflow-x-auto overflow-y-hidden"
-      style="
-        column-gap: {{ settings.layout_gap_size }}px;
-        row-gap: {{ settings.layout_gap_size | times: 1.5 }}px;"
-      x-init="setTimeout(function(){ if (isOverflown($el)) show_arrows = true}, 600);"  
-      x-ref="slider">
-      {{ slides }}
+    }"
+    x-init="
+      updateOverflow();
+      window.addEventListener('resize', () => updateOverflow());
+      $refs.slider.addEventListener('scroll', () => syncIndex());
+    "
+  >
+
+    <!-- Slides -->
+   <div
+  class="hidescrollbar slider-scroll slider-momentum inline-flex w-full overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-proximity gap-10 pl-3 pr-6"
+  x-ref="slider"> 
+    {{ slides }}
+  </div>
+
+    <!-- Arrows (desktop) -->
+      <div
+        class="hidden md:flex justify-end gap-3 pt-4 slider-arrows {{ settings.layout_horizontal }}"
+        x-show="show_arrows"
+        x-cloak
+      >
+        <button
+          @click="scrollBack()"
+          aria-label="Previous slide"
+          class="
+            inline-flex items-center justify-center
+            w-11 h-11
+            rounded-full
+            border-2 border-white
+            text-white
+            bg-transparent
+            transition
+            hover:bg-white/10
+            hover:-translate-y-0.5
+            focus:outline-none
+            focus:ring-2 focus:ring-white/60 focus:ring-offset-2 focus:ring-offset-transparent
+          "
+        >
+          {% render 'component__icon', icon: 'arrow-left', size: '20', class: 'fill-white' %}
+        </button>
+
+        <button
+          @click="scrollNext()"
+          aria-label="Next slide"
+          class="
+            inline-flex items-center justify-center
+            w-11 h-11
+            rounded-full
+            border-2 border-white
+            text-white
+            bg-transparent
+            transition
+            hover:bg-white/10
+            hover:-translate-y-0.5
+            focus:outline-none
+            focus:ring-2 focus:ring-white/60 focus:ring-offset-2 focus:ring-offset-transparent
+          "
+        >
+          {% render 'component__icon', icon: 'arrow-right', size: '20', class: 'fill-white' %}
+        </button>
+      </div>
+
+
+
+    <!-- Pagination dots -->
+    <div class="slider-dots md:hidden">
+      <template x-for="i in (index_size + 1)" :key="i">
+        <button
+          class="slider-dot"
+          :class="{ 'is-active': index === (i - 1) }"
+          @click="scrollToIndex(i - 1)"
+          aria-label="Go to slide"
+        ></button>
+      </template>
     </div>
 
-    {%- comment -%}arrows{%- endcomment -%}
-    <div class="md:flex justify-end hidden gap-4 pt-4 {{ settings.layout_horizontal }}">
-      <div {% unless show_arrows == 'true' %}x-show="show_arrows"{% endunless %}>
-        <button class="btn btn--plain btn--small"
-          title="{{ 'general.media.previous_slide' | t }}"
-          {% if settings.enable_animations %}
-            x-transition:enter="animation-300"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="animation-300"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0"
-          {% endif %}
-          x-cloak
-          @click="scrollBack();">
-          {% render 'component__icon', icon: 'arrow-left', size: '20', class: '' %}
-        </button>
-      </div>
-      <div {% unless show_arrows == 'true' %}x-show="show_arrows"{% endunless %}>
-        <button class="btn btn--plain btn--small"
-          title="{{ 'general.media.next_slide' | t }}"
-          {% if settings.enable_animations %}
-            x-transition:enter="animation-300"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="animation-300"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0"
-          {% endif %}
-          x-cloak
-          @click="scrollNext();">
-          {% render 'component__icon', icon: 'arrow-right', size: '20', class: '' %}
-        </button>
-      </div>
-    </div>
-    
   </div>
 </div>

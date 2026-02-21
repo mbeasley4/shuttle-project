@@ -22,10 +22,10 @@
       "type": "product-slider",
       "name": "Product slider",
       "settings": {
-        "collection": "convenience-stores",
+        "collection": "restaurants",
         "products_count": 7,
-        "heading": "",
-        "content": "",
+        "heading": "Recommended Shortening Shuttles® for Your Restaurant",
+        "content": "<p>The Shortening Shuttle® for restaurants offers a cutting-edge solution for simplified and safer cooking oil management. Elevate your kitchen operations with our innovative products designed for efficiency and convenience.</p>",
         "button_label": "",
         "button_url": "",
         "spacing_top": 100,
@@ -35,10 +35,22 @@
         "style_border": "border--b-width",
         "visibility": ""
       }
+    },
+    "ss_sizing_BbUFzB": {
+      "type": "ss-sizing",
+      "name": "Shortening Shuttle – Sizing Chart Image",
+      "settings": {
+        "heading": "Shortening Shuttle® Sizing Chart",
+        "subheading": "Use this chart to determine the correct model based on fryer drain height and disposal requirements.",
+        "chart_image": "shopify://shop_images/measurement-sizing-chart-2023.jpg",
+        "image_alt": "Shortening Shuttle sizing chart showing model dimensions and capacity",
+        "caption": "Measurements are approximate. Always verify fryer drain height and disposal clearance before selecting a model."
+      }
     }
   },
   "order": [
     "main",
-    "product_slider_yYdg9t"
+    "product_slider_yYdg9t",
+    "ss_sizing_BbUFzB"
   ]
 }

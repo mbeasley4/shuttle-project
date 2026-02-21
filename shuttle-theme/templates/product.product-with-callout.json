@@ -1,0 +1,43 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "product",
+      "settings": {}
+    },
+    "product_callout_9pK3Nn": {
+      "type": "product-callout",
+      "blocks": {
+        "callout_C8c3Ya": {
+          "type": "callout",
+          "settings": {
+            "image": "shopify://shop_images/SS-bf200.jpg",
+            "image_alt": "bf-200",
+            "heading": "Important Accessory for Cleaner Transfers",
+            "body_text": "<p>If you're working with extra dirty oil or fryer vats with heavy debris, we strongly recommend adding <a href=\"https://shortening-shuttle.com/collections/the-boss-replacement-parts/products/ss-914-sp-bs-100-basket-strainer-for-the-shortening-shuttle-waste-oil-carrier-simplicty-series?variant=926983815\"><strong>a basket strainer</strong></a>. This accessory helps catch crumbs and food particles during draining—reducing clogs and improving safety and equipment lifespan.</p>",
+            "product": "ss-914-sp-bs-100-basket-strainer-for-the-shortening-shuttle-waste-oil-carrier-simplicty-series",
+            "button_label": "Add to Cart",
+            "link_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "callout_C8c3Ya"
+      ],
+      "name": "Product Callout",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "product_callout_9pK3Nn"
+  ]
+}

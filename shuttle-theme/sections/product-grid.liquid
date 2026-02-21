@@ -8,7 +8,8 @@
 
 <section
   class="
-    product-grid
+    px-4 md:px-8
+    py-12 md:py-16
     {{ section.settings.visibility }}
     {{ section.settings.color_scheme }}
     {{ section.settings.color_border }}
@@ -24,15 +25,15 @@
       class="
         grid
         auto-rows-fr
-        {{ section.settings.row_size_mobile }}
-        {{ section.settings.row_size_desktop }}
+        grid grid-cols-1
+        md:grid-cols-4
         gap-4
         mt-10
       "
     >
       <!-- Product Items -->
       {% for product in collections[section.settings.collection].products limit: section.settings.products_count %}
-        <div class="relative group rounded-2xl bg-white border-gray-300 shadow-xl">
+        <div class="relative flex flex-col items-center rounded-2xl bg-white border-gray-300 shadow-xl">
           <div class="transition duration-300 transform group-hover:-translate-y-1">
             {% render 'component__product-item', product: product, source: 'prod-grid' %}
           </div>
@@ -46,11 +47,6 @@
     </div>
   </div>
 </section>
-{% stylesheet %}
-  .product-grid {
-    padding: 5rem 2rem;
-  }
-{% endstylesheet %}
 {% schema %}
 {
   "name": "t:sections.product_grid.name",

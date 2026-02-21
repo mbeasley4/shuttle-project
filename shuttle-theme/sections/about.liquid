@@ -4,117 +4,241 @@
   Add to page.about.json or any template
 {% endcomment %}
 
+{% comment %}
+  About Page Sections – Shortening Shuttle
+  - Hero with optional background image
+  - Alternating text + image blocks
+  - Timeline section with entries
+  - TailwindCSS utilities
+{% endcomment %}
+
+{% comment %} 
+  About Page Sections – Shortening Shuttle
+  - Hero with optional background image
+  - Alternating text + image blocks
+  - Timeline section with entries
+  - TailwindCSS utilities
+{% endcomment %}
+
 <section class="w-full">
+
   <!-- HERO -->
-  <div class="bg-gray-900 text-white py-24 px-6 text-center">
-    <h1 class="text-5xl font-extrabold mb-6 tracking-tight">About the Shortening Shuttle<sup>®</sup></h1>
-    <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-      Proudly made in the USA and trusted by commercial kitchens for over 30 years. Our mission is simple: make fryer
-      oil handling safer, faster, and easier.
-    </p>
-  </div>
-
-  <!-- STORY -->
-  <div class="py-20 px-6 bg-white">
-    <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-      <div>
-        <h2 class="text-4xl font-bold text-gray-900 mb-6">A Legacy of Safety & Innovation</h2>
-
-        <p class="text-gray-700 leading-relaxed mb-4">
-          The Shortening Shuttle<sup>®</sup> was created to solve a critical problem in commercial kitchens:
-          transporting hot fryer oil without risking burns, spills, or downtime. What started as a simple safety concept
-          has grown into the industry’s most trusted fryer oil transport system.
-        </p>
-
-        <p class="text-gray-700 leading-relaxed">
-          Restaurants, schools, hospitals, food trucks, commissaries, and institutional kitchens rely on the Shortening
-          Shuttle<sup>®</sup> to keep their teams safe and their operations running smoothly.
-        </p>
+  <div class="relative text-white py-16 md:py-28 px-4 md:px-6 text-center overflow-hidden">
+    {% if section.settings.hero_bg_image != blank %}
+      <div
+        class="absolute inset-0 bg-cover bg-center"
+        style="background-image:url('{{ section.settings.hero_bg_image | image_url: width: 2400 }}');"
+        aria-hidden="true">
       </div>
+      <div class="absolute inset-0 bg-black/60"></div>
+    {% else %}
+      <div class="absolute inset-0 bg-gray-900"></div>
+    {% endif %}
 
-      <div></div>
-    </div>
-  </div>
-
-  <!-- WHY WE EXIST -->
-  <div class="py-20 px-6 bg-gray-50 text-center">
-    <div class="max-w-4xl mx-auto">
-      <h2 class="text-4xl font-bold text-gray-900 mb-6">Why We Exist</h2>
-
-      <p class="text-lg text-gray-700 leading-relaxed max-w-3xl mx-auto">
-        Every day, kitchen teams risk injuries handling hot oil. We believe in removing that risk. The Shortening
-        Shuttle<sup>®</sup> provides a controlled, OSHA-friendly way to manage fryer oil — protecting employees,
-        extending oil life, and improving back-of-house efficiency.
+    <div class="relative z-10 max-w-4xl mx-auto">
+      <h1 class="text-5xl font-extrabold mb-6">
+        {{ section.settings.hero_heading }}
+      </h1>
+      <p class="text-xl text-gray-200 leading-relaxed">
+        {{ section.settings.hero_subheading }}
       </p>
     </div>
   </div>
 
-  <!-- TIMELINE -->
-  <div class="py-20 px-6 bg-white">
-    <div class="max-w-5xl mx-auto">
-      <h2 class="text-4xl font-bold text-gray-900 mb-12 text-center">Our Journey</h2>
+  {% for block in section.blocks %}
 
-      <div class="space-y-10">
-        <div class="border-l-4 border-blue-600 pl-6">
-          <h3 class="text-2xl font-bold text-gray-900">1994 — The Beginning</h3>
-          <p class="text-gray-700">Developed to replace unsafe metal pails and outdated oil disposal methods.</p>
-        </div>
+    <!-- CONTENT BLOCK -->
+    {% if block.type == 'content' %}
+      <div class="py-12 md:py-20 px-4 md:px-6 {{ block.settings.bg_color }}">
+        <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
 
-        <div class="border-l-4 border-blue-600 pl-6">
-          <h3 class="text-2xl font-bold text-gray-900">2000s — Nationwide Expansion</h3>
-          <p class="text-gray-700">
-            Adopted by restaurants, cafeterias, commissaries, and large institutional kitchens.
-          </p>
-        </div>
+          {% if block.settings.image_position == 'left' and block.settings.image != blank %}
+            <div>
+              <img
+                src="{{ block.settings.image | image_url: width: 1200 }}"
+                alt="{{ block.settings.heading }}"
+                class="rounded-xl shadow-lg w-full h-auto"
+                loading="lazy">
+            </div>
+          {% endif %}
 
-        <div class="border-l-4 border-blue-600 pl-6">
-          <h3 class="text-2xl font-bold text-gray-900">Today — Industry Standard</h3>
-          <p class="text-gray-700">
-            The Shortening Shuttle<sup>®</sup> remains the gold standard in fryer oil transport systems.
-          </p>
+          <div>
+            <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
+              {{ block.settings.heading }}
+            </h2>
+
+            <div class="text-gray-700 leading-relaxed space-y-4">
+              {{ block.settings.content }}
+            </div>
+          </div>
+
+          {% if block.settings.image_position == 'right' and block.settings.image != blank %}
+            <div>
+              <img
+                src="{{ block.settings.image | image_url: width: 1200 }}"
+                alt="{{ block.settings.heading }}"
+                class="rounded-xl shadow-lg w-full h-auto"
+                loading="lazy">
+            </div>
+          {% endif %}
+
         </div>
       </div>
+    {% endif %}
+
+    <!-- TIMELINE BLOCK -->
+    {% if block.type == 'timeline' %}
+      <div class="py-12 md:py-20 px-4 md:px-6">
+        <div class="max-w-6xl mx-auto flex flex-col justify-center lg:grid-cols-2 gap-14 items-start">
+      
+      {% for i in (1..6) %}
+
+        {% assign title_key = 'title_' | append: i %}
+        {% assign text_key  = 'text_'  | append: i %}
+
+        {% assign title = block.settings[title_key] %}
+        {% assign text  = block.settings[text_key] %}
+
+        {% if title != blank %}
+          <div class="border-l-4 border-blue-600 pl-6">
+            <h3 class="text-2xl font-bold text-gray-900">
+              {{ title }}
+            </h3>
+
+            {% if text != blank %}
+              <p class="text-gray-700 mt-1">
+                {{ text }}
+              </p>
+            {% endif %}
+          </div>
+        {% endif %}
+
+      {% endfor %}
     </div>
   </div>
-
-  <!-- AMERICAN BUILT -->
-  <div class="py-20 px-6 bg-gray-100">
-    <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
-      <div>
-        <h2 class="text-4xl font-bold text-gray-900 mb-6">Proudly Made in the USA</h2>
-        <p class="text-gray-700 leading-relaxed mb-4">
-          Every Shortening Shuttle<sup>®</sup> is built with precision aluminum and assembled by skilled American
-          craftsmen. We take pride in the durability and reliability of every unit.
-        </p>
-
-        <p class="text-gray-700 leading-relaxed">
-          Our commitment to domestic production ensures high-quality standards, safe working conditions, and long-term
-          product support for our customers.
-        </p>
-      </div>
-    </div>
-  </div>
+    {% endif %}
+  {% endfor %}
 
   <!-- CTA -->
-  <div class="py-20 px-6 ss-bg-blue text-white text-center">
-    <h2 class="text-4xl font-bold mb-4">Ready to Make Your Kitchen Safer?</h2>
+  <div class="py-12 md:py-20 px-4 md:px-6 ss-bg-blue text-white text-center">
+    <h2 class="text-3xl md:text-5xl font-bold mb-4">
+      {{ section.settings.cta_heading }}
+    </h2>
     <p class="text-lg text-blue-100 mb-8">
-      Explore our models and discover why the Shortening Shuttle<sup>®</sup> is trusted nationwide.
+      {{ section.settings.cta_subheading }}
     </p>
 
     <a
-      href="/collections/all"
-      class="inline-block bg-white text-blue-800 font-bold px-10 py-4 rounded-xl shadow-lg hover:bg-blue-50 transition text-lg"
-    >
-      Shop Products
+      href="{{ section.settings.cta_link }}"
+      class="inline-block bg-white text-blue-800 font-bold uppercase tracking-widest px-10 py-4 rounded-xl shadow-lg hover:bg-blue-50 transition text-base">
+      {{ section.settings.cta_label }}
     </a>
   </div>
-</section>
 
+</section>
 {% schema %}
 {
   "name": "About Sections",
-  "settings": [],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_bg_image",
+      "label": "Hero Background Image"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Hero Heading",
+      "default": "About the Shortening Shuttle®"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subheading",
+      "label": "Hero Subheading",
+      "default": "Proudly made in the USA and trusted by commercial kitchens for over 30 years."
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "CTA Heading",
+      "default": "Ready to Make Your Kitchen Safer?"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_subheading",
+      "label": "CTA Subheading",
+      "default": "Explore our models and discover why the Shortening Shuttle® is trusted nationwide."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA Button Label",
+      "default": "Shop Products"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Link",
+      "default": "/collections/all"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "content",
+      "name": "Content Section",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "richtext", "id": "content", "label": "Content" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image Position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "select",
+          "id": "bg_color",
+          "label": "Background Color",
+          "options": [
+            { "value": "bg-white", "label": "White" },
+            { "value": "bg-gray-50", "label": "Light Gray" },
+            { "value": "bg-gray-100", "label": "Gray" }
+          ],
+          "default": "bg-white"
+        }
+      ]
+    },
+    {
+      "type": "timeline",
+      "name": "Timeline Section",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Timeline Heading", "default": "Our Journey" },
+
+        { "type": "text", "id": "title_1", "label": "Item 1 Title" },
+        { "type": "textarea", "id": "text_1", "label": "Item 1 Description" },
+
+        { "type": "text", "id": "title_2", "label": "Item 2 Title" },
+        { "type": "textarea", "id": "text_2", "label": "Item 2 Description" },
+
+        { "type": "text", "id": "title_3", "label": "Item 3 Title" },
+        { "type": "textarea", "id": "text_3", "label": "Item 3 Description" },
+
+        { "type": "text", "id": "title_4", "label": "Item 4 Title" },
+        { "type": "textarea", "id": "text_4", "label": "Item 4 Description" },
+
+        { "type": "text", "id": "title_5", "label": "Item 5 Title" },
+        { "type": "textarea", "id": "text_5", "label": "Item 5 Description" },
+
+        { "type": "text", "id": "title_6", "label": "Item 6 Title" },
+        { "type": "textarea", "id": "text_6", "label": "Item 6 Description" }
+      ]
+    }
+  ],
   "presets": [
     {
       "name": "About Sections",

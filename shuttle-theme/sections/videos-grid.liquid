@@ -5,11 +5,7 @@
   - Optional AOS animation
   - Full client-side JSON loading
 {% endcomment %}
-<!-- HERO -->
-<div class="bg-gray-900 text-black py-24 px-6 text-center interior-hero">
-  <h1 class="text-5xl font-extrabold mb-6 tracking-tight">{{ page.title }}</h1>
-</div>
-<section class="videos-grid-section py-12 px-6">
+<section class="videos-grid-section py-12 px-4 md:px-6">
   <div class="container">
     {% if section.settings.show_heading %}
       <h1 class="text-4xl font-bold text-gray-900 mb-10 text-center">
@@ -79,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
 
             <div class="p-6">
-              <h2 class="text-xl font-semibold text-gray-900 mb-2">
+              <h2 class="text-3xl md:text-5xl font-semibold text-gray-900 mb-2">
                 ${video.title}
               </h2>
               ${video.description ? `<p class="text-gray-600 text-sm">${video.description}</p>` : ""}

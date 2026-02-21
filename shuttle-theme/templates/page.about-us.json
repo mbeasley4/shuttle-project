@@ -21,8 +21,72 @@
     },
     "about_GxJYib": {
       "type": "about",
+      "blocks": {
+        "content_YjzVTh": {
+          "type": "content",
+          "settings": {
+            "heading": "A Legacy of Safety & Innovation",
+            "content": "<p>The Shortening Shuttle® was created to solve a critical problem in commercial kitchens: transporting hot fryer oil without risking burns, spills, or downtime. What started as a simple safety concept has grown into the industry’s most trusted fryer oil transport system.<br/><br/>Restaurants, schools, hospitals, food trucks, commissaries, and institutional kitchens rely on the Shortening Shuttle® to keep their teams safe and their operations running smoothly.</p>",
+            "image": "shopify://shop_images/ss-611-hero.png",
+            "image_position": "right",
+            "bg_color": "bg-white"
+          }
+        },
+        "content_98KxaQ": {
+          "type": "content",
+          "settings": {
+            "heading": "Why We Exist",
+            "content": "<p>Every day, kitchen teams risk injuries handling hot oil. We believe in removing that risk. The Shortening Shuttle provides a controlled method for managing fryer oil, helping to protect employees, extending oil life, and enhancing back-of-house efficiency.<br/></p>",
+            "image": "shopify://shop_images/shortening-shuttle-factory.png",
+            "image_position": "left",
+            "bg_color": "bg-gray-50"
+          }
+        },
+        "timeline_zcEJzz": {
+          "type": "timeline",
+          "settings": {
+            "heading": "Our Journey",
+            "title_1": "1994 — The Beginning",
+            "text_1": "Developed to replace unsafe metal pails and outdated oil disposal methods.",
+            "title_2": "2000s — Nationwide Expansion",
+            "text_2": "Adopted by restaurants, cafeterias, commissaries, and large institutional kitchens.",
+            "title_3": "Today — Industry Standard",
+            "text_3": "The Shortening Shuttle® remains the gold standard in fryer oil transport systems.",
+            "title_4": "",
+            "text_4": "",
+            "title_5": "",
+            "text_5": "",
+            "title_6": "",
+            "text_6": ""
+          }
+        },
+        "content_dKEVRY": {
+          "type": "content",
+          "settings": {
+            "heading": "Proudly Made in the USA",
+            "content": "<p>Every Shortening Shuttle® is built with precision aluminum and assembled by skilled American craftsmen. We take pride in the durability and reliability of every unit.<br/><br/>Our commitment to domestic production ensures high-quality standards, safe working conditions, and long-term product support for our customers.</p>",
+            "image": "shopify://shop_images/made-in-usa.png",
+            "image_position": "right",
+            "bg_color": "bg-gray-100"
+          }
+        }
+      },
+      "block_order": [
+        "content_YjzVTh",
+        "content_98KxaQ",
+        "timeline_zcEJzz",
+        "content_dKEVRY"
+      ],
       "name": "About Sections",
-      "settings": {}
+      "settings": {
+        "hero_bg_image": "shopify://shop_images/slide-2-v2.png",
+        "hero_heading": "About the Shortening Shuttle®",
+        "hero_subheading": "Proudly made in the USA and trusted by commercial kitchens for over 30 years.",
+        "cta_heading": "Ready to Make Your Kitchen Safer?",
+        "cta_subheading": "Explore our models and discover why the Shortening Shuttle® is trusted nationwide.",
+        "cta_label": "Shop All Models",
+        "cta_link": "shopify://collections/shuttles"
+      }
     }
   },
   "order": [

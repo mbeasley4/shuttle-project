@@ -11,24 +11,20 @@
   Possible enhancements:
     - Add alternative layout with large quote.
 {% endcomment %}
-<div id="testimonials-slider" class="py-16 bg-gray-50">
-  <div class="mx-auto px-6 relative">
+<div id="testimonials-slider" class="py-12 md:py-16 bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4 md:px-6">
     {% if section.settings.heading != blank %}
-      <h2 class="text-4xl font-bold text-center mb-12 text-gray-900">
+      <h2 class="text-3xl md:text-5xl text-center mb-12 text-gray-900">
         {{ section.settings.heading }}
       </h2>
     {% endif %}
 
-    <!-- Center the whole slider -->
     <div class="swiper testimonial-swiper relative">
-      <div class="swiper-wrapper mx-auto max-w-4xl" id="testimonial-slides"></div>
-      <div class="ss-controls max-w-4xl">
-        <!-- Add the pagination dots -->
-        <div class="swiper-pagination"></div>
-        <!-- Add the navigation arrows -->
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-      </div>
+      <div class="swiper-wrapper" id="testimonial-slides"></div>
+
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
     </div>
   </div>
 </div>
@@ -37,20 +33,109 @@
     overflow-x: hidden;
   }
 
-  .testimonial-swiper .swiper-button-prev {
-    left: -0.5rem !important;
+  /* Slide content: centered column */
+  .testimonial-swiper .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 3rem 3rem;
+    box-sizing: border-box;
+    text-align: center;
   }
-  .testimonial-swiper .swiper-button-next {
-    right: -1rem !important;
-  }
-  #testimonials-slider .ss-controls {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
+
+  .testimonial-swiper .slide-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    height: 100%;
+  }
+
+  /* Avatar */
+  .testimonial-swiper .testimonial-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+  }
+
+  /* Quote text */
+  .testimonial-swiper .testimonial-quote {
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-style: italic;
+    color: #374151;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    max-width: 680px;
+  }
+
+  /* Author */
+  .testimonial-swiper .testimonial-author {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    color: #20204b;
+  }
+
+  .testimonial-swiper .testimonial-company {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+  }
+
+  /* Navigation arrows */
+  .testimonial-swiper .swiper-button-prev,
+  .testimonial-swiper .swiper-button-next {
+    display:none;
+    @media (min-width:1024px){
+      display:block;
+      color: #20204b;
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .testimonial-swiper .swiper-button-prev::after,
+  .testimonial-swiper .swiper-button-next::after {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .testimonial-swiper .swiper-button-prev {
+    left: 0;
+  }
+
+  .testimonial-swiper .swiper-button-next {
+    right: 0;
+  }
+
+  /* Pagination dots */
+  .testimonial-swiper .swiper-pagination {
+    position: relative;
+    margin-top: 1.5rem;
+  }
+
+  .testimonial-swiper .swiper-pagination-bullet {
+    height:20px;
+    width:20px;
+    background: #20204b;
+    opacity: 0.3;
+    @media (min-width:1024px) {
+      height:12px;
+      width:12px;
+    }
+  }
+
+  .testimonial-swiper .swiper-pagination-bullet-active {
+    opacity: 1;
+  }
+
+  @media (max-width: 640px) {
+    .testimonial-swiper .swiper-slide {
+      padding: 1rem 0.5rem 2.5rem;
+    }
   }
 {% endstylesheet %}
 <script>
@@ -65,24 +150,19 @@
         wrapper.innerHTML = items
           .map(
             (t) => `
-        <div class="swiper-slide flex justify-center">
-          <div class="p-10 max-w-4xl flex justify-center flex-col items-center">
-
-            <img 
-              src="${ASSET_BASE_URL}${t.image}"
-              alt="${t.author}"
-              class="w-18 h-18 rounded-full mb-12 border-2 p-2 border-gray-200 shadow"
-            />
-
-            <p class="text-3xl italic text-gray-700 py-6 text-center">
-              "${t.quote}"
-            </p>
-
-            <div class="font-semibold text-gray-900">${t.author}</div>
-            ${t.company ? `<div class="text-sm text-gray-500">${t.company}</div>` : ''}
+          <div class="swiper-slide">
+            <div class="slide-inner">
+              <img
+                src="${ASSET_BASE_URL}${t.image}"
+                alt="${t.author}"
+                class="testimonial-avatar"
+              />
+              <p class="testimonial-quote">&ldquo;${t.quote}&rdquo;</p>
+              <div class="testimonial-author">${t.author}</div>
+              ${t.company ? `<div class="testimonial-company">${t.company}</div>` : ''}
+            </div>
           </div>
-        </div>
-      `
+        `
           )
           .join('');
 

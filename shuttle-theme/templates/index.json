@@ -15,37 +15,21 @@
         "slide_WkRxdL": {
           "type": "slide",
           "settings": {
-            "title": "<p>The <strong>BOSS</strong></p>",
-            "subtitle": "<p>Battery Operated Shortening Shuttle</p>",
-            "description": "<p>The Ultimate Cordless Fryer Oil Transporter & Oil Filter Machine in One!</p>",
+            "title": "<p>The BOSS</p>",
+            "subtitle": "<p><strong>B</strong>attery <strong>O</strong>perated <strong>S</strong>hortening <strong>S</strong>huttle</p>",
+            "description": "<p><strong>Save up to 50% Oil Savings. Zero Spills. One Machine. </strong>Drain, filter, and reuse fry oil safely.</p>",
             "hero_image": "shopify://shop_images/theboss-hero.png",
             "background_image": "shopify://shop_images/about-hero.png",
             "text_color": "#ffffff",
-            "primary_cta_label": "View Product",
+            "primary_cta_label": "Get The Boss",
             "primary_cta_link": "shopify://products/the-boss",
-            "secondary_cta_label": "View Specs",
-            "secondary_cta_link": ""
-          }
-        },
-        "slide_jTzVLw": {
-          "type": "slide",
-          "settings": {
-            "title": "<p>Model SS-611</p>",
-            "subtitle": "<p><strong>Economy Series </strong></p>",
-            "description": "<p>Five different models allow the <strong>Economy Series Shortening Shuttle®</strong> to be used with virtually all fryers and in all locations.</p>",
-            "hero_image": "shopify://shop_images/ss-611-hero.png",
-            "background_image": "shopify://shop_images/slide-2-v2.png",
-            "text_color": "#ffffff",
-            "primary_cta_label": "View the Series",
-            "primary_cta_link": "shopify://collections/economy-series",
-            "secondary_cta_label": "View Specs",
-            "secondary_cta_link": ""
+            "secondary_cta_label": "Calculate Savings",
+            "secondary_cta_link": "#calculator"
           }
         }
       },
       "block_order": [
-        "slide_WkRxdL",
-        "slide_jTzVLw"
+        "slide_WkRxdL"
       ],
       "settings": {}
     },

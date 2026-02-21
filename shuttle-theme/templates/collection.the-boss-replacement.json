@@ -9,26 +9,22 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "page",
+    "ss_internal_hero_e9XKfW": {
+      "type": "ss-internal-hero",
+      "name": "Internal Hero",
       "settings": {
-        "show_hero": true,
-        "hero_title": "",
-        "hero_image": "shopify://shop_images/testimonials-hero-bg.png"
+        "background_image": "shopify://shop_images/economy-hero-bg.png",
+        "heading": "",
+        "subheading": ""
       }
     },
-    "testimonials_grid_YKi46m": {
-      "type": "testimonials-grid",
-      "name": "Testimonials Grid (Asset JSON)",
-      "settings": {
-        "show_heading": true,
-        "heading": "What Customers Say",
-        "enable_aos": true
-      }
+    "main": {
+      "type": "collection",
+      "settings": {}
     }
   },
   "order": [
-    "main",
-    "testimonials_grid_YKi46m"
+    "ss_internal_hero_e9XKfW",
+    "main"
   ]
 }

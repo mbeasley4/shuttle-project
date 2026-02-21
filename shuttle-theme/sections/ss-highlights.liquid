@@ -2,8 +2,8 @@
   Homepage highlights
 {% endcomment %}
 <section class="highlights-section">
-  <div class="container mx-auto py-6 px-4">
-    <h2>Versatile Fryer Oil Transporter for Commercial Kitchens</h2>
+  <div class="container mx-auto py-6 px-1 md:px-6">
+    <h2 class="text-3xl md:text-5xl">Versatile Fryer Oil Transporter for Commercial Kitchens</h2>
     <p>
       The Shortening Shuttle<sup><sup>®</sup></sup> is a versatile, safety-focused fryer oil transporter and oil filter
       machine engineered for efficient restaurant oil management. Designed to integrate with most oil filtration systems
@@ -18,14 +18,14 @@
           class="w-full"
         >
         <div class="content">
-          <h3>Restaurants</h3>
+          <h3 class="text-xl md:text-2xl">Restaurants</h3>
           <p class="highlight-description">
             Utilize The Shortening Shuttle<sup>®</sup> in your restaurant to streamline oil management, enhance kitchen
             safety, and optimize operational efficiency.
           </p>
           <p>
             {{
-              'Learn more about upgrading oil handling'
+              'Upgrade Your Oil Handling'
               | link_to: 'https://shortening-shuttle.com/pages/restaurants'
             }}
           </p>
@@ -39,13 +39,13 @@
           class="w-full"
         >
         <div class="content">
-          <h3>Convenience Stores</h3>
+          <h3 class="text-xl md:text-2xl">Convenience Stores</h3>
           <p class="highlight-description">
             Elevate convenience store operations with The Shortening Shuttle<sup>®</sup>, simplifying oil management,
             reducing waste, and prioritizing safety.
           </p>
           <p>
-            {{ 'See how to boost store safety' | link_to: 'https://shortening-shuttle.com/pages/convenience-stores' }}
+            {{ 'Boost Store Safety' | link_to: 'https://shortening-shuttle.com/pages/convenience-stores' }}
           </p>
         </div>
       </div>
@@ -57,13 +57,13 @@
           class="w-full"
         >
         <div class="content">
-          <h3>Food Trucks</h3>
+          <h3 class="text-xl md:text-2xl">Food Trucks</h3>
           <p class="highlight-description">
             Choose The Shortening Shuttle<sup>®</sup> for food trucks to revolutionize on-the-go oil management,
             ensuring safety, and efficiency in your mobile kitchen.
           </p>
           <p>
-            {{ 'Find out how to equip your food truck' | link_to: 'https://shortening-shuttle.com/pages/food-trucks' }}
+            {{ 'Equip Your Food Truck' | link_to: 'https://shortening-shuttle.com/pages/food-trucks' }}
           </p>
         </div>
       </div>
@@ -75,14 +75,14 @@
           class="w-full"
         >
         <div class="content">
-          <h3>Institutional Kitchens</h3>
+          <h3 class="text-xl md:text-2xl">Institutional Kitchens</h3>
           <p class="highlight-description">
             In institutional kitchens, the Shortening Shuttle<sup>®</sup> is the ultimate solution for streamlined,
             reliable, and safe large-scale cooking oil management.
           </p>
           <p>
             {{
-              'Learn more about upgrading oil handling'
+              'Optimize Kitchen Operations'
               | link_to: 'https://shortening-shuttle.com/pages/institutional-kitchens'
             }}
           </p>
@@ -93,73 +93,129 @@
 </section>
 
 {% stylesheet %}
-  .icon {
-    width: 300px;
-  }
   .highlights-section {
-    display: flex;
-    padding: 5rem 2rem;
-    text-align: center;
-    justify-content: center;
-  }
-  .highlights-industries {
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: repeat(4, 1fr);
-    padding: 2rem;
-  }
-  .highlights-industries .highlights-section h2 {
-    margin-bottom: 3rem;
+    padding: 3rem 1rem;
   }
 
-  @media (max-width: 1100px) {
+  @media (min-width: 768px) {
+    .highlights-section {
+      padding: 5rem 2rem;
+    }
+  }
+
+  .highlights-section > .container {
+    max-width: 1200px;
+  }
+
+  .highlights-section h2 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .highlights-section > .container > p {
+    text-align: center;
+    max-width: 780px;
+    margin: 0 auto 3rem;
+    color: #444;
+    line-height: 1.7;
+  }
+
+  /* 2-column grid on desktop */
+  .highlights-industries {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0;
+  }
+
+  /* Each card: image left, content right */
+  .highlights-industries .highlight {
+    display: flex;
+    flex-direction: row;
+    border-radius: 10px;
+    background-color: #eef3ff;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .highlights-industries .highlight:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.13);
+    transform: translateY(-2px);
+  }
+
+  /* Image: fixed width column */
+  .highlights-industries .highlight img {
+    width: 200px;
+    min-width: 200px;
+    height: 100%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  /* Content column */
+  .highlights-industries .highlight .content {
+    padding: 1.75rem 1.75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .highlights-industries .highlight h3 {
+    font-size: 1.6rem;
+    margin-bottom: 0.6rem;
+    color: #20204b;
+  }
+
+  .highlights-industries .highlight-description {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+  }
+
+  /* CTA link */
+  .highlights-industries .highlight a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    align-self: flex-start;
+    background-color: #20204b;
+    color: white;
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .highlights-industries .highlight a:hover {
+    background-color: #16163a;
+    transform: translateX(3px);
+  }
+
+  /* Tablet: single column, keep horizontal layout */
+  @media (max-width: 1024px) {
     .highlights-industries {
       grid-template-columns: 1fr;
     }
   }
 
-  .highlights-industries .highlight {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 0;
-    border-radius: 8px;
-    background-color: #eef3ff;
-    line-height: 1.4;
-    overflow: hidden;
-  }
-  .highlights-industries .highlight .content {
-    padding: 1.5rem;
-  }
+  /* Mobile: stack image above content */
+  @media (max-width: 640px) {
+    .highlights-industries .highlight {
+      flex-direction: column;
+    }
 
-  .highlights-industries .highlight > * + * {
-    margin-top: 1rem;
-  }
-
-  .highlights-industries .highlight h3 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-  }
-
-  .highlights-industries .highlight-description {
-    flex: 1 1;
-  }
-
-  .highlights-industries .highlight a {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    background-color: #20204b;
-    color: white;
-    border: 1px solid #20204b;
-    border-radius: 5px;
-    padding: 4px 10px;
-    line-height: 1;
-    text-decoration: none;
-    font-size: 0.9rem;
-    margin-top: 1.2rem;
-    line-height: 1.2;
+    .highlights-industries .highlight img {
+      width: 100%;
+      min-width: unset;
+      height: 200px;
+    }
   }
 {% endstylesheet %}
 

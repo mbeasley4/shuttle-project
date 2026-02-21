@@ -1,0 +1,89 @@
+{% comment %}
+  Shortening Shuttle® – Sizing Chart Image
+  Displays a single sizing chart image
+{% endcomment %}
+
+<section class="py-12 md:py-20 px-4 md:px-6 bg-gray-50">
+  <div class="max-w-6xl mx-auto">
+
+    <!-- Heading -->
+    {% if section.settings.heading != blank %}
+      <div class="text-center mb-10">
+        <h2 class="text-3xl md:text-5xl font-bold text-gray-900">
+          {{ section.settings.heading }}
+        </h2>
+
+        {% if section.settings.subheading != blank %}
+          <p class="mt-3 text-lg text-gray-700 max-w-3xl mx-auto">
+            {{ section.settings.subheading }}
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- Image -->
+    {% if section.settings.chart_image != blank %}
+      <div class="flex justify-center">
+        <figure class="bg-white rounded-xl shadow-sm p-4">
+          <img
+            src="{{ section.settings.chart_image | image_url: width: 2000 }}"
+            alt="{{ section.settings.image_alt | escape }}"
+            class="w-full h-auto max-w-5xl mx-auto"
+            loading="lazy"
+          />
+        </figure>
+      </div>
+    {% endif %}
+
+    <!-- Optional Caption -->
+    {% if section.settings.caption != blank %}
+      <p class="mt-6 text-sm text-gray-500 text-center max-w-4xl mx-auto">
+        {{ section.settings.caption }}
+      </p>
+    {% endif %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Sizing Chart Image",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shortening Shuttle® Sizing Chart"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Use this chart to determine the correct model based on fryer drain height and disposal requirements."
+    },
+    {
+      "type": "image_picker",
+      "id": "chart_image",
+      "label": "Sizing Chart Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image Alt Text",
+      "default": "Shortening Shuttle sizing chart showing model dimensions and capacity"
+    },
+    {
+      "type": "textarea",
+      "id": "caption",
+      "label": "Caption / Disclaimer",
+      "default": "Measurements are approximate. Always verify fryer drain height and disposal clearance before selecting a model."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shortening Shuttle – Sizing Chart Image",
+      "category": "Shortening Shuttle"
+    }
+  ]
+}
+{% endschema %}

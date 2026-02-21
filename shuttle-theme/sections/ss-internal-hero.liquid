@@ -20,7 +20,13 @@
   <!-- Content -->
   <div class="relative z-10 mx-auto max-w-7xl px-6 py-16 md:py-24 text-white internal-hero__content">
     <h1 class="internal-hero__heading text-3xl md:text-5xl font-semibold leading-tight">
-      {{ section.settings.heading | default: page.title }}
+    {% if section.settings.heading != blank %}
+        {{ section.settings.heading }}
+    {% elsif page.title != blank %}
+        {{ page.title }}
+    {% else %}
+        {{ collection.title }}
+    {% endif %}
     </h1>
 
     {%- if section.settings.subheading != blank -%}

@@ -14,8 +14,8 @@
       "settings": {
         "show_hero": true,
         "hero_title": "",
-        "hero_image": "shopify://shop_images/convenience-store.jpg",
-        "side_image": "shopify://shop_images/convenience-side-img.png"
+        "hero_image": "shopify://shop_images/slide-2-v2.png",
+        "side_image": "shopify://shop_images/food-truck-content.png"
       }
     },
     "product_slider_yYdg9t": {
@@ -24,8 +24,8 @@
       "settings": {
         "collection": "convenience-stores",
         "products_count": 7,
-        "heading": "Find the Right Shuttle for Your Store",
-        "content": "<p>From busy gas station grills to quick-serve delis, convenience stores need fast and safe fry oil disposal without slowing down service. Browse our models below to find the right fit for your store's fryer setup and disposal needs.</p>",
+        "heading": "Find the Right Shuttle for Your Food Truck",
+        "content": "<p>Space is tight and every minute counts on a food truck. The Shortening Shuttle® makes safe, mess-free fry oil disposal simple — no matter where the road takes you. Browse our  models below to find the right fit for your setup.</p>",
         "button_label": "",
         "button_url": "",
         "spacing_top": 100,

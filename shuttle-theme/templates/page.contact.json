@@ -11,7 +11,6 @@
   "sections": {
     "main": {
       "type": "page",
-      "disabled": true,
       "settings": {
         "show_hero": true,
         "hero_title": "",
@@ -19,18 +18,21 @@
         "side_image": "shopify://shop_images/about-img.png"
       }
     },
-    "videos_grid_YcV4zW": {
-      "type": "videos-grid",
-      "name": "Videos Grid (Asset JSON)",
+    "contact_form_be84Ny": {
+      "type": "contact-form",
+      "name": "Contact form",
       "settings": {
-        "show_heading": true,
-        "heading": "Videos",
-        "enable_aos": true
+        "heading": "",
+        "subheading": "We’d love to hear from you. Fill out the form below and we’ll be in touch.",
+        "button_label": "Send message",
+        "success_message": "Thanks for reaching out. We’ll get back to you shortly.",
+        "show_phone": false,
+        "color_scheme": ""
       }
     }
   },
   "order": [
     "main",
-    "videos_grid_YcV4zW"
+    "contact_form_be84Ny"
   ]
 }

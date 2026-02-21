@@ -1,12 +1,12 @@
 <!-- sections/product-slider.liquid -->
 {% comment %}
-  Product Slider
+  Product Slider — Full cards only (uncrammed layout)
   - Tailwind-first layout
-  - No inline styles
+  - Snap + momentum
 {% endcomment %}
- 
+
 <section
-  class="
+  class="py-16
     {{ section.settings.visibility }}
     {{ section.settings.color_scheme }}
     {{ section.settings.color_border }}
@@ -16,77 +16,90 @@
   <div
     class="
       {{ settings.layout_horizontal }}
-      px-0
+      max-w-[1400px]
+      mx-auto
+      px-6
       pt-[{{ section.settings.spacing_top }}px]
       pb-[{{ section.settings.spacing_bottom }}px]
     "
   >
 
-    {% render 'component__section-header',
-      container_class: 'px-4' %}
+    {% render 'component__section-header', container_class: 'px-4' %}
 
     {% assign slider_size = collections[section.settings.collection].products.size
       | at_most: section.settings.products_count
       | minus: 1 %}
 
     {%- capture slides -%}
-
-      {% for product in collections[section.settings.collection].products
-        limit: section.settings.products_count %}
-
+      {% for product in collections[section.settings.collection].products limit: section.settings.products_count %}
         <div
           class="
             flex-none
+            snap-start
+            w-[88%]
+            sm:w-[60%]
+            md:w-[42%]
+            lg:w-[30%]
+            xl:w-[26%]
             flex
             justify-center
-            w-8/12
-            md:w-[26%]
           "
-          x-bind:data-slide="{{ forloop.index0 }}"
+          data-slide="{{ forloop.index0 }}"
         >
           {% render 'component__product-item',
             product: product,
             source: 'prod-slider' %}
         </div>
-
       {% endfor %}
 
       {% for block in section.blocks %}
-        {% case block.type %}
-          {% when 'card' %}
-
-            {% assign slider_size = collections[section.settings.collection].products.size
-              | at_most: section.settings.products_count %}
-
-            <div
-              class="
-                flex-none
-                flex
-                justify-center
-                w-8/12
-                md:w-[26%]
-                whitespace-normal
-              "
-              x-bind:data-slide="{{ slider_size }}"
-            >
-              {% render 'component__content-item', 
-                background_color: settings.thumbmails_color_scheme,
-                title: block.settings.heading,
-                content: block.settings.content,
-                button_label: block.settings.button_label,
-                url: block.settings.button_url %}
-            </div>
-
-        {% endcase %}
+        {% if block.type == 'card' %}
+          {% assign slider_size = collections[section.settings.collection].products.size
+            | at_most: section.settings.products_count %}
+          <div
+            class="
+              flex-none
+              snap-start
+              w-[88%]
+              sm:w-[60%]
+              md:w-[42%]
+              lg:w-[30%]
+              xl:w-[26%]
+              flex
+              justify-center
+            "
+            data-slide="{{ slider_size }}"
+          >
+            {% render 'component__content-item',
+              background_color: settings.thumbmails_color_scheme,
+              title: block.settings.heading,
+              content: block.settings.content,
+              button_label: block.settings.button_label,
+              url: block.settings.button_url %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    {%- endcapture -%}
+    {%- capture slides -%}
+      {% for product in collections[section.settings.collection].products limit: section.settings.products_count %}
+        <div
+          class="flex-none snap-start w-[88%] sm:w-[60%] md:w-[42%] lg:w-[30%] xl:w-[26%] flex justify-center"
+          data-slide="{{ forloop.index0 }}"
+        >
+          {% render 'component__product-item',
+            product: product,
+            source: 'prod-slider' %}
+        </div>
       {% endfor %}
 
+      <!-- Spacer slide to prevent last item clipping -->
+      <div class="flex-none w-[3rem] snap-start" aria-hidden="true"></div>
     {%- endcapture -%}
 
     {% render 'component__slider',
-      container_class: 'px-4',
+      container_class: 'px-6',
       slider_size: slider_size,
       slides: slides %}
-
   </div>
 </section>
 

@@ -1,0 +1,60 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "disabled": true,
+      "settings": {
+        "show_hero": false,
+        "hero_title": ""
+      }
+    },
+    "ss_internal_hero_qNikch": {
+      "type": "ss-internal-hero",
+      "name": "Internal Hero",
+      "settings": {
+        "background_image": "shopify://shop_images/videos-hero-bg.png",
+        "heading": "Shortening Shuttle Product Demonstrations",
+        "subheading": "Meet the Shortening Shuttle — a compact, mess-free way to measure and dispense cooking oils with precision."
+      }
+    },
+    "ss_side_by_side_NaEi3q": {
+      "type": "ss-side-by-side",
+      "custom_css": [
+        ".w-full {background-color:#efefef;}"
+      ],
+      "name": "Side-by-Side Content",
+      "settings": {
+        "heading": "See the Shortening Shuttle® in Action",
+        "subheading": "",
+        "body": "<p>Sometimes seeing is believing. Watch our product demonstration videos to see <strong>exactly how the Shortening Shuttle® works</strong>, how easy it is to use, and why kitchen operators across the country trust it for safe, mess-free fry oil disposal. Whether you're evaluating a model or training your staff, these videos are a great place to start.</p>",
+        "image": "shopify://shop_images/videos-hero-bg.png",
+        "button_label": "",
+        "button_link": ""
+      }
+    },
+    "videos_grid_YcV4zW": {
+      "type": "videos-grid",
+      "name": "Videos Grid (Asset JSON)",
+      "settings": {
+        "show_heading": false,
+        "heading": "Videos",
+        "enable_aos": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "ss_internal_hero_qNikch",
+    "ss_side_by_side_NaEi3q",
+    "videos_grid_YcV4zW"
+  ]
+}

@@ -14,12 +14,43 @@
       "settings": {
         "show_hero": true,
         "hero_title": "",
-        "hero_image": "shopify://shop_images/institutional-hero.png",
+        "hero_image": "shopify://shop_images/institutional-hero.jpg",
         "side_image": "shopify://shop_images/about-img.png"
+      }
+    },
+    "product_slider_7mmYeL": {
+      "type": "product-slider",
+      "name": "Product slider",
+      "settings": {
+        "collection": "frontpage",
+        "products_count": 7,
+        "heading": "Find the Right Shuttle for Your Kitchen",
+        "content": "<p>From school cafeterias to hospital dining facilities, the Shortening Shuttle® has a model built for your operation. Browse our options below to find the perfect fit for your kitchen's fry oil disposal needs.</p>",
+        "button_label": "",
+        "button_url": "",
+        "spacing_top": 100,
+        "spacing_bottom": 100,
+        "color_scheme": "color__bg-secondary color__secondary",
+        "color_border": "color__border-divider-1",
+        "style_border": "border--b-width",
+        "visibility": ""
+      }
+    },
+    "ss_sizing_MEgMzG": {
+      "type": "ss-sizing",
+      "name": "Shortening Shuttle – Sizing Chart Image",
+      "settings": {
+        "heading": "Shortening Shuttle® Sizing Chart",
+        "subheading": "Use this chart to determine the correct model based on fryer drain height and disposal requirements.",
+        "chart_image": "shopify://shop_images/measurement-sizing-chart-2023.jpg",
+        "image_alt": "Shortening Shuttle sizing chart showing model dimensions and capacity",
+        "caption": "Measurements are approximate. Always verify fryer drain height and disposal clearance before selecting a model."
       }
     }
   },
   "order": [
-    "main"
+    "main",
+    "product_slider_7mmYeL",
+    "ss_sizing_MEgMzG"
   ]
 }

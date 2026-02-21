@@ -1,26 +1,25 @@
 {% comment %}
-  Homepage Hero Slider
-  - Full-width background (min-height 600px)
-  - Centered content (max-width: 1500px)
-  - Background image fills full height
-  - Fade transition
-  - AOS animates text only on slide in
-  - Mobile stack (image top, text bottom)
-  - Desktop arrows only
-  - White arrows & pagination
+  Homepage Hero Slider - BOLD EDITION
+  - Larger, highlighted product image with glow effect
+  - Bolder typography with stronger visual hierarchy
+  - Enhanced contrast and depth
+  - Product takes center stage
 {% endcomment %}
 
 <section class="homepage-hero-slider w-full relative">
   <div class="swiper myHeroSwiper">
     <div class="swiper-wrapper">
       {% for block in section.blocks %}
+        {% unless block.disabled %}
         <div class="swiper-slide">
           <!-- FULL WIDTH / FULL HEIGHT BACKGROUND -->
           <div
-            class="hero-bg has-bg w-full min-h-[600px] flex items-center"
+            class="hero-bg has-bg w-full min-h-[520px] sm:min-h-[600px] max-h-[85vh] lg:max-h-[70vh] flex items-center relative"
             style="
               {% if block.settings.background_image %}
                 background-image: url({{ block.settings.background_image | img_url: '2000x' }});
+                background-size: cover;
+                background-position: center;
               {% endif %}
             "
           >
@@ -29,57 +28,56 @@
               class="
                 welcome-content
                 w-full
-                max-w-[1500px] mx-auto
-                px-6 lg:px-28
-                py-12 lg:py-20
+                max-w-[1600px] mx-auto
+                px-2 sm:px-6 lg:px-16
+                pt-16 pb-20 sm:pt-20 sm:pb-24 lg:py-28
                 flex flex-col lg:flex-row
-                items-center justify-between gap-10
-                relative
+                items-center justify-between gap-6 sm:gap-8 lg:gap-12
+                relative z-10
               "
               style="color: {{ block.settings.text_color }};"
             >
-              <!-- IMAGE (mobile first, desktop last) -->
-              {% if block.settings.hero_image %}
-                <div
-                  class="icon w-[400px] sm:w-[300px] mx-auto lg:mx-0 order-1 lg:order-2 relative z-10"
-                  data-aos="fade-down"
-                  data-aos-duration="900"
-                  data-aos-delay="100"
-                >
-                  <img
-                    src="{{ block.settings.hero_image | img_url: '900x' }}"
-                    alt="{{ block.settings.title | escape }}"
-                    class="w-full h-auto object-contain select-none"
-                  >
-                </div>
-              {% endif %}
-
-              <!-- TEXT -->
+              <!-- TEXT CONTENT - Now first on desktop -->
               <div
-                class="flex-1 text-center lg:text-left order-2 lg:order-1 slide-text-wrapper relative z-10"
+                class="flex-1 text-center lg:text-left order-2 lg:order-1 slide-text-wrapper relative z-10 max-w-3xl"
               >
                 {% if block.settings.title %}
-                  <h1 data-aos="fade-up" data-aos-duration="800" data-aos-delay="150">
+                  <h1 
+                    class="hero-title text-6xl lg:text-8xl font-black mb-3 lg:mb-4 leading-[0.95]"
+                    data-aos="fade-up" 
+                    data-aos-duration="800" 
+                    data-aos-delay="150"
+                  >
                     {{ block.settings.title | remove: '<p>' | remove: '</p>' }}
                   </h1>
                 {% endif %}
 
                 {% if block.settings.subtitle %}
-                  <h2 data-aos="fade-up" data-aos-duration="900" data-aos-delay="300">
+                  <h2 
+                    class="hero-subtitle text-2xl sm:text-2xl lg:text-3xl mb-3 lg:mb-4 leading-tight tracking-wide"
+                    data-aos="fade-up" 
+                    data-aos-duration="900" 
+                    data-aos-delay="300"
+                  >
                     {{ block.settings.subtitle | remove: '<p>' | remove: '</p>' }}
                   </h2>
                 {% endif %}
 
                 {% if block.settings.description %}
-                  <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="450">
+                  <div 
+                    class="hero-description text-lg sm:text-xl lg:text-2xl mb-3 lg:mb-5 leading-relaxed"
+                    data-aos="fade-up" 
+                    data-aos-duration="1000" 
+                    data-aos-delay="450"
+                  >
                     {{ block.settings.description }}
                   </div>
                 {% endif %}
 
                 <!-- CTAs -->
-                {% if block.settings.primary_cta_label or block.settings.secondary_cta_label %}
+                {% if block.settings.primary_cta_label or block.settings.secondary_cta_label or block.settings.popup_cta_label != blank %}
                   <div
-                    class="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+                    class="mt-6 sm:mt-8 px-4 md:px-0 flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center lg:justify-start"
                     data-aos="fade-up"
                     data-aos-duration="1100"
                     data-aos-delay="600"
@@ -88,13 +86,19 @@
                       <a
                         href="{{ block.settings.primary_cta_link }}"
                         class="
-                          inline-block rounded-sm
+                          hero-cta-primary
+                          inline-flex items-center justify-center
+                          rounded-md
                           bg-white text-gray-900
-                          px-8 py-4
-                          text-sm font-semibold uppercase tracking-wide
-                          hover:bg-gray-100
-                          transition-colors duration-200
+                          px-4 py-2
+                          lg:px-8 lg:py-5
+                          text-base font-black uppercase tracking-widest
+                          hover:bg-gray-100 hover:shadow-2xl
+                          shadow-lg
+                          transition-all duration-300
+                          transform hover:scale-105
                         "
+                        aria-label="{{ block.settings.primary_cta_label }}"
                       >
                         {{ block.settings.primary_cta_label }}
                       </a>
@@ -104,13 +108,17 @@
                       <a
                         href="{{ block.settings.secondary_cta_link }}"
                         class="
-                          inline-block rounded-sm
-                          border border-white text-white
-                          px-8 py-4
-                          text-sm font-semibold uppercase tracking-wide
-                          hover:bg-white hover:text-gray-900
-                          transition-colors duration-200
-                        "
+                            hero-cta-secondary
+                            hero-cta-secondary--glow
+                            inline-flex items-center justify-center
+                            rounded-md
+                            px-4 py-2
+                            lg:px-4 lg:py-5
+                            text-base font-black uppercase tracking-widest
+                            transition-all duration-300
+                            transform hover:scale-105
+                          "
+                        aria-label="{{ block.settings.secondary_cta_label }}"
                       >
                         {{ block.settings.secondary_cta_label }}
                       </a>
@@ -118,15 +126,40 @@
                   </div>
                 {% endif %}
               </div>
+
+              <!-- PRODUCT IMAGE - LARGER & HIGHLIGHTED -->
+              {% if block.settings.hero_image %}
+                <div
+                  class="product-hero-image-wrapper order-1 lg:order-2 relative z-10 w-full lg:w-[45%] flex items-center justify-center"
+                  data-aos="zoom-in"
+                  data-aos-duration="1000"
+                  data-aos-delay="200"
+                >
+                  <!-- Glow effect background -->
+                  <div class="absolute inset-0 bg-gradient-radial from-white/20 via-transparent to-transparent blur-3xl scale-110"></div>
+                  
+                  <!-- Product image -->
+                  <div class="relative product-spotlight">
+                    <img
+                      src="{{ block.settings.hero_image | img_url: '1200x' }}"
+                      alt="{{ block.settings.title | escape }}"
+                      class="w-full h-auto object-contain select-none max-w-[160px] sm:max-w-[220px] lg:max-w-[350px] xl:max-w-[400px] max-h-[55vh] sm:max-h-[65vh] mx-auto"
+                      loading="eager"
+                    >
+                  </div> 
+                </div>
+              {% endif %}
             </div>
           </div>
-        </div>
+        </div> 
+        {% endunless %}
       {% endfor %}
-      <!-- Controls -->
-      <div class="swiper-pagination"></div>
-      <div class="swiper-button-next custom-nav lg:flex hidden"></div>
-      <div class="swiper-button-prev custom-nav lg:flex hidden"></div>
     </div>
+    
+    <!-- SWIPER CONTROLS -->
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-next custom-nav hidden lg:flex"></div>
+    <div class="swiper-button-prev custom-nav hidden lg:flex"></div>
   </div>
 </section>
 
@@ -134,12 +167,12 @@
   document.addEventListener('DOMContentLoaded', function () {
     const heroSwiper = new Swiper('.myHeroSwiper', {
       loop: true,
-      speed: 1000,
+      speed: 1200,
       effect: 'fade',
       fadeEffect: { crossFade: true },
 
       autoplay: {
-        delay: 56000,
+        delay: 8000,
         disableOnInteraction: false,
       },
 
@@ -168,31 +201,159 @@
 {% endjavascript %}
 
 {% stylesheet %}
+  /* Hero background with stronger overlay */
   .hero-bg.has-bg {
     position: relative;
     background-size: cover;
     background-position: center;
   }
+  
   .hero-bg.has-bg::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.70);
+    background: linear-gradient(
+      135deg, 
+      rgba(0, 0, 0, 0.75) 0%, 
+      rgba(0, 0, 0, 0.65) 50%,
+      rgba(0, 0, 0, 0.75) 100%
+    );
     z-index: 1;
   }
+  
   .hero-bg > .welcome-content {
     position: relative;
     z-index: 2;
   }
-  .welcome-content h1 {
-    font-size: 3.5rem;
-    font-weight: 400;
-    color: #fff;
-  }
+  
+  /* BOLD TYPOGRAPHY STYLES */
+  .welcome-content h1,
   .welcome-content h2,
-  .welcome-content p {
-    color: #fff;
+  .welcome-content h3,
+  .welcome-content h4,
+  .welcome-content h5,
+  .welcome-content h6 {
+    font-family: 'Bebas Neue', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
+
+  .welcome-content h1 {
+    font-weight: 400;
+    color: #e0e8ff;
+    -webkit-text-stroke: 1px rgba(160, 185, 255, 0.5);
+    text-shadow:
+      0 0 30px rgba(100, 130, 255, 0.5),
+      0 0 70px rgba(32, 32, 75, 0.6),
+      0 4px 20px rgba(0, 0, 0, 0.85),
+      0 10px 44px rgba(0, 0, 0, 0.65);
+    line-height: 1;
+    filter: drop-shadow(0 6px 28px rgba(60, 80, 200, 0.35));
+  }
+
+  .welcome-content h2 {
+    font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+    font-weight: 400;
+    color: #c8cdd6;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+  
+  .welcome-content .hero-description {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+  .welcome-content .hero-description strong {
+    font-weight:700;
+    color: #e0e8ff;
+    -webkit-text-stroke: 1px rgba(160, 185, 255, 0.5);
+    text-shadow:
+      0 0 30px rgba(100, 130, 255, 0.5),
+      0 0 70px rgba(32, 32, 75, 0.6),
+      0 4px 20px rgba(0, 0, 0, 0.85),
+      0 10px 44px rgba(0, 0, 0, 0.65);
+    line-height: 1;
+    filter: drop-shadow(0 6px 28px rgba(60, 80, 200, 0.35));
+  }
+
+  /* PRODUCT IMAGE SPOTLIGHT EFFECT */
+  .product-spotlight {
+    filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.5))
+            drop-shadow(0 0 80px rgba(255, 255, 255, 0.15));
+  }
+
+  /* Radial gradient glow */
+  .bg-gradient-radial {
+    background: radial-gradient(circle at center, var(--tw-gradient-stops));
+  }
+
+  /* Enhanced product image on hover */
+  .product-hero-image-wrapper:hover .product-spotlight {
+    filter: drop-shadow(0 25px 80px rgba(0, 0, 0, 0.6))
+            drop-shadow(0 0 100px rgba(255, 255, 255, 0.25));
+    transition: all 0.5s ease;
+  }
+
+  /* BUTTON ENHANCEMENTS */
+  .hero-cta-primary,
+  .hero-cta-secondary {
+    min-width: 200px;
+    font-weight: 900;
+  }
+
+  .hero-cta-primary {
+    box-shadow: 
+      0 10px 30px rgba(0, 0, 0, 0.3),
+      0 0 40px rgba(255, 255, 255, 0.1);
+  }
+
+  .hero-cta-primary:hover {
+    box-shadow: 
+      0 15px 40px rgba(0, 0, 0, 0.4),
+      0 0 60px rgba(255, 255, 255, 0.2);
+  }
+
+  /* Light-blue glow secondary CTA (matches H1 vibe) */
+.hero-cta-secondary--glow {
+  color: #e0e8ff;
+  border: 2px solid rgba(160, 185, 255, 0.7);
+  background: linear-gradient(
+    180deg,
+    rgba(224, 232, 255, 0.08),
+    rgba(224, 232, 255, 0.02)
+  );
+  box-shadow:
+    0 0 18px rgba(100, 130, 255, 0.35),
+    inset 0 0 0 rgba(255,255,255,0);
+  backdrop-filter: blur(2px);
+  text-shadow:
+    0 0 12px rgba(100, 130, 255, 0.65),
+    0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+.hero-cta-secondary--glow:hover {
+  color: #ffffff;
+  border-color: rgba(200, 215, 255, 0.9);
+  background: linear-gradient(
+    180deg,
+    rgba(224, 232, 255, 0.2),
+    rgba(224, 232, 255, 0.05)
+  );
+  box-shadow:
+    0 0 28px rgba(120, 160, 255, 0.65),
+    0 10px 40px rgba(32, 32, 75, 0.6);
+}
+
+/* Mobile tweak so glow doesn't overpower */
+@media (max-width: 640px) {
+  .hero-cta-secondary--glow {
+    box-shadow:
+      0 0 10px rgba(100, 130, 255, 0.4);
+  }
+}
+
+
+  /* Swiper navigation */
   .ss-controls {
     top: 50%;
     position: absolute;
@@ -201,6 +362,7 @@
     z-index: 1;
     height: 100%;
   }
+  
   .homepage-hero-slider svg.swiper-navigation-icon {
     color: #ffffff !important;
     fill: #ffffff !important;
@@ -208,22 +370,71 @@
 
   @media (min-width: 1024px) {
     .homepage-hero-slider .swiper-button-next {
-      right: 20px;
+      right: 30px;
     }
     .homepage-hero-slider .swiper-button-prev {
-      left: 20px;
+      left: 30px;
     }
   }
 
-  /* Pagination dots */
+  /* Stronger pagination dots */
   .homepage-hero-slider .swiper-pagination-bullet {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.4);
     opacity: 1;
+    width: 12px;
+    height: 12px;
   }
 
   .homepage-hero-slider .swiper-pagination-bullet-active {
     background: #ffffff !important;
+    width: 12px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
   }
+
+  /* Mobile adjustments */
+
+  /* Mobile hero tuning */
+  @media (max-width: 640px) {
+
+    .homepage-hero-slider .hero-subtitle {
+      font-size: 1.25rem;
+      line-height: 1.25;
+    }
+
+    .homepage-hero-slider .hero-description {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .homepage-hero-slider .hero-cta-primary,
+    .homepage-hero-slider .hero-cta-secondary,
+    .homepage-hero-slider .hero-cta-popup {
+      width: 100%;
+      min-width: unset;
+      padding: 1rem 1.25rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  /* Bold text in the subtitle — subtle size pulse */
+  .hero-subtitle strong {
+    color: #e8ecf5;
+    font-size: 1.35em;
+    line-height: 1.1;
+    display: inline-block;
+    animation: boldPulse 3s ease-in-out infinite;
+    display:inline;
+  }
+  .hero-subtitle strong:nth-of-type(2) { animation-delay: 0.4s; }
+  .hero-subtitle strong:nth-of-type(3) { animation-delay: 0.8s; }
+  .hero-subtitle strong:nth-of-type(4) { animation-delay: 1.2s; }
+  @keyframes boldPulse {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.08); }
+  }
+
+  
 {% endstylesheet %}
 
 {% schema %}
@@ -239,7 +450,7 @@
         { "type": "richtext", "id": "title", "label": "Slide Title" },
         { "type": "richtext", "id": "subtitle", "label": "Slide Subtitle" },
         { "type": "richtext", "id": "description", "label": "Description" },
-        { "type": "image_picker", "id": "hero_image", "label": "Right-side Image" },
+        { "type": "image_picker", "id": "hero_image", "label": "Product Image" },
         { "type": "image_picker", "id": "background_image", "label": "Background Image" },
         { "type": "color", "id": "text_color", "label": "Text Color", "default": "#ffffff" },
 
@@ -247,7 +458,8 @@
         { "type": "url", "id": "primary_cta_link", "label": "Primary CTA Link" },
 
         { "type": "text", "id": "secondary_cta_label", "label": "Secondary CTA Label", "default": "View Specs" },
-        { "type": "url", "id": "secondary_cta_link", "label": "Secondary CTA Link" }
+        { "type": "url", "id": "secondary_cta_link", "label": "Secondary CTA Link" },
+
       ]
     }
   ],

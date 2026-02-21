@@ -1,0 +1,583 @@
+/** Global theme styles - non-critical, loaded after critical.css */
+
+/* =============================================
+   TYPOGRAPHY SCALE
+   ============================================= */
+
+h1 {
+  font-size: clamp(3rem, 6vw, 6rem);
+}
+
+h2 {
+  font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+}
+ 
+h3 {
+  font-size: clamp(1.125rem, 3vw, 1.8rem);
+}
+
+h2 b.blue {
+  color: #20204b;
+  font-size: clamp(1.75rem, 4.5vw, 2.8rem);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Bebas Neue', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 1.2rem;
+}
+
+p:empty {
+  display: none;
+}
+
+:is(p, h1, h2, h3, h4, h5, h6):first-child,
+:empty:first-child + :where(p, h1, h2, h3, h4, h5, h6) {
+  margin-block-start: 0;
+}
+
+:is(p, h1, h2, h3, h4, h5, h6):last-child,
+:where(p, h1, h2, h3, h4, h5, h6) + :has(+ :empty:last-child) {
+  margin-block-end: 0;
+}
+
+/* =============================================
+   LAYOUT UTILITIES
+   ============================================= */
+
+.ss-section-inner {
+  padding: 2rem;
+  width: 100%;
+}
+
+/* Child elements constrained to central column */
+.shopify-section > * {
+  grid-column: 2;
+}
+.shopify-section h2 {
+  margin-bottom: 1.25rem;
+}
+/* Full-width utility */
+.shopify-section > .full-width {
+  grid-column: 1 / -1;
+}
+
+/* =============================================
+   BRAND COLOR UTILITIES
+   ============================================= */
+
+.bg-brand,
+.color__bg-overlay-1,
+.ss-bg-blue,
+.color__bg-secondary {
+  background-color: #20204b;
+}
+
+.color__bg-overlay-1.color__text {
+  color: white;
+}
+
+/* =============================================
+   COMPONENTS
+   ============================================= */
+
+.header__logo {
+  padding: 0.5rem;
+}
+
+.interior-hero {
+  background: url(images/ss-bg.png) repeat-x center;
+  background-size: contain;
+}
+
+.ss-arrow {
+  height: 20px;
+  width: 20px;
+}
+
+.btn {
+  margin-top: 1rem;
+  border-radius: 6px;
+}
+
+#site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1100;
+  background: #ffffff;
+
+  /* Subtle separation from white sections */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* =============================================
+   FOOTER
+   ============================================= */
+
+.shopify-section.shopify-section-group-footer-group {
+  background-color: #1e1e1e;
+  color: white;
+  margin: 0;
+  padding: 2rem;
+  font-weight: 400;
+}
+
+.shopify-section-group-footer-group a {
+  color: white;
+  font-weight: 400;
+}
+
+/* =============================================
+   SAVINGS CALCULATOR MODAL
+   ============================================= */
+
+/* ── Overlay ── */
+.ss-calc-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.ss-calc-overlay.is-open {
+  opacity: 1;
+  pointer-events: all;
+}
+.ss-calc-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+}
+
+/* ── Panel ── */
+.ss-calc-panel {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  border-radius: 12px;
+  width: 92%;
+  max-width: 700px;
+  max-height: 92vh;
+  overflow-y: auto;
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
+}
+.ss-calc-overlay.is-open .ss-calc-panel {
+  transform: scale(1) translateY(0);
+}
+
+/* ── Close button ── */
+.ss-calc-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  font-size: 4rem;
+  line-height: 1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #000;
+  padding: 0;
+  z-index: 2;
+  transition: color 0.3s, transform 0.3s;
+}
+.ss-calc-close:hover {
+  color: red;
+}
+
+/* ── Modal title ── */
+.ss-calc-title {
+  color: #fff;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin: 0;
+  padding: 1.25rem 3.5rem 0.6rem 1.5rem; /* right clearance for close button */
+}
+
+/* ── CTA button ── */
+.ss-calc-cta {
+  padding: 1.25rem 1.5rem 1.5rem;
+  text-align: center;
+  border-top: 1px solid #e5e7eb;
+}
+.ss-calc-cta-btn {
+  display: inline-block;
+  background: #20204b;
+  color: #fff;
+  padding: 0.75rem 2.25rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 0.2s, transform 0.15s;
+}
+.ss-calc-cta-btn:hover {
+  background: #2d2d6b;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ── Header ── */
+.ss-calc-header {
+  background: #20204b;
+  padding: 0;
+}
+.ss-calc-header-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+.ss-calc-header-row > span {
+  padding: 1.25rem 1.5rem;
+  color: #fff;
+  font-size: 1rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+  border-right: 2px solid rgba(255, 255, 255, 0.2);
+}
+.ss-calc-header-col2 {
+  text-align: center;
+}
+
+/* ── Table ── */
+.ss-calc-table {
+  /* softened border vs loud navy */
+  border: 2px solid rgba(32, 32, 75, 0.25);
+  border-top: none;
+  overflow: hidden;
+}
+.ss-calc-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 58px;
+  align-items: stretch;
+  border-bottom: 1px solid #d4d8e8;
+}
+.ss-calc-row:last-child {
+  border-bottom: none;
+}
+
+.ss-calc-label {
+  display: flex;
+  align-items: start;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.05rem;
+  letter-spacing: 0.05em;
+  color: #20204b;
+
+  /* softened divider */
+  border-right: 2px solid rgba(32, 32, 75, 0.15);
+
+  /* quieter neutral */
+  background: #f6f7fb;
+
+  text-transform: uppercase;
+}
+.ss-calc-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #20204b;
+}
+.ss-calc-cell--readonly {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* ── Accent row (Oil Reduction) ── */
+/* previously: bright #ffe800 */
+.ss-calc-row--accent .ss-calc-label {
+  background: #fff4cc;
+  color: #6b5600;
+  border-right-color: rgba(107, 86, 0, 0.15);
+}
+.ss-calc-cell--accent {
+  background: #fff4cc;
+  color: #6b5600;
+  font-size: 1.4rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Savings row ── */
+/* previously: bright #5cb85c */
+.ss-calc-row--savings .ss-calc-label {
+  background: #e7f4ee;
+  color: #14532d;
+  border-right-color: rgba(20, 83, 45, 0.15);
+}
+.ss-calc-cell--savings {
+  background: #e7f4ee;
+  color: #14532d;
+  font-size: 1.4rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Annual row ── */
+/* previously: dark green block */
+.ss-calc-row--annual .ss-calc-label {
+  background: #d9f5ea;
+  color: #064e3b;
+  font-size: 1.1rem;
+  border-right-color: rgba(6, 78, 59, 0.15);
+}
+.ss-calc-cell--annual {
+  background: #d9f5ea;
+  color: #064e3b;
+  font-size: 1.6rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Stepper ── */
+.ss-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.ss-stepper-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid rgba(32, 32, 75, 0.35);
+  background: #fff;
+  color: #20204b;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  line-height: 1;
+  padding-bottom: 2px;
+  flex-shrink: 0;
+}
+.ss-stepper-btn:hover {
+  background: #20204b;
+  color: #fff;
+  border-color: rgba(32, 32, 75, 0.75);
+}
+.ss-stepper-val {
+  min-width: 3rem;
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #20204b;
+}
+
+/* ── Capacity select ── */
+.ss-select {
+  border: 2px solid rgba(32, 32, 75, 0.35);
+  border-radius: 6px;
+  padding: 0.45rem 0.85rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #20204b;
+  background: #fff !important;
+  cursor: pointer;
+  min-width: 110px;
+}
+.ss-select:focus {
+  outline: none;
+  border-color: rgba(32, 32, 75, 0.75);
+}
+
+/* ── Footnote ── */
+.ss-calc-note {
+  margin: 0 !important;
+  padding: 0.2rem 1.5rem;
+  font-size: 0.8rem;
+  color: #6b7280; /* calmer than #777 */
+  text-align: center;
+  border-top: 1px solid #e5e7eb;
+  line-height: 1.5;
+}
+
+/* ── Mobile ── */
+@media (max-width: 540px) {
+  .ss-calc-panel {
+    width: 96%;
+  }
+  .ss-calc-title {
+    font-size: 1.15rem;
+    padding: 1rem 3rem 0.5rem 1rem;
+  }
+  .ss-calc-header-row > span:first-child,
+  .ss-calc-header-col2 {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+  .ss-calc-label {
+    padding: 0.6rem 0.85rem;
+    font-size: 0.9rem;
+  }
+  .ss-calc-cell {
+    padding: 0.6rem 0.85rem;
+  }
+  .ss-calc-cell--annual {
+    font-size: 1.3rem;
+  }
+  .ss-calc-cta {
+    padding: 1rem;
+  }
+  .ss-calc-cta-btn {
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* =============================================
+   DARK / BRAND BACKGROUND SECTIONS
+   ============================================= */
+
+.color__bg-secondary h2,
+.color__bg-secondary h3,
+.color__bg-secondary p {
+  color: white !important;
+}
+
+.color__bg-secondary h2 {
+  font-size: 2.4rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem !important;
+}
+
+.color__bg-secondary h3 {
+  font-weight: 500;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem !important;
+}
+
+/* ================================
+   Slider scrollbar cleanup (global)
+================================ */
+
+/* Hide scrollbar but keep scroll */
+.hidescrollbar {
+  -ms-overflow-style: none; /* IE 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hidescrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* Ensure last slide snaps fully into view */
+.slider-scroll {
+  scroll-padding-left: 1.5rem; /* matches pl-3 approx */
+  scroll-padding-right: 4rem;  /* extra breathing room for last card */
+}
+
+/* Optional: subtle fade edges for horizontal sliders */
+.slider-fade {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+}
+
+/* ================================
+   Slider polish
+================================ */
+
+.slider-momentum {
+  -webkit-overflow-scrolling: touch;
+}
+
+.slider-arrows {
+  position: relative;
+  z-index: 10;
+}
+
+/* Pagination dots */
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.slider-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.35);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.slider-dot.is-active {
+  background: white;
+  transform: scale(1.25);
+}
+
+/* Dark bg variant */
+.color__bg-body .slider-dot,
+.color__bg-neutral .slider-dot {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.color__bg-body .slider-dot.is-active,
+.color__bg-neutral .slider-dot.is-active {
+  background: #111;
+}
+
+/* ==========================================================
+   Optional: Desktop arrow button styling (white outline)
+   (Safe to keep even if you use Tailwind classes instead)
+========================================================== */
+.slider-arrow-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.15);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.slider-arrow-btn:hover {
+  background: rgba(0, 0, 0, 0.28);
+  transform: translateY(-1px);
+}
+.slider-arrow-btn svg path,
+.slider-arrow-btn svg {
+  fill: #fff;
+}

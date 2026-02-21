@@ -1,0 +1,414 @@
+{% comment %}
+  Savings Calculator — global modal popup
+  - Opens via: #calculator hash, href="#calculator" links, data-action="open-calculator" buttons,
+    or window.openSavingsCalculator()
+  - Can be added to any page template (homepage, product page, etc.)
+  - Oil Reduction % is configured by the admin in theme customizer
+{% endcomment %}
+
+{% assign is_boss_page = false %}
+{% if request.path == '/products/the-boss' %}
+  {% assign is_boss_page = true %}
+{% endif %}
+
+<div id="savings-calculator-modal" class="ss-calc-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="ss-calc-title">
+  <div class="ss-calc-backdrop"></div>
+  <div class="ss-calc-panel mx-1 md:mx-0">
+    <button class="ss-calc-close" aria-label="Close">&times;</button>
+    <h2 id="ss-calc-title" class="text-4xl text-black p-6 mb-0">Calculate Savings</h2>
+    <div class="ss-calc-header">
+      <div class="ss-calc-header-row">
+        <span>Estimated Savings Overview</span>
+        <span class="ss-calc-header-col2">Cost Components</span>
+      </div>
+    </div>
+
+    <div class="ss-calc-table">
+      <div class="ss-calc-row">
+        <div class="ss-calc-label">Fryers</div>
+        <div class="ss-calc-cell">
+          <div class="ss-stepper">
+            <button class="ss-stepper-btn" data-calc-action="decrement" data-target="fryers">−</button>
+            <span id="calc-fryers" class="ss-stepper-val">{{ section.settings.default_fryers }}</span>
+            <button class="ss-stepper-btn" data-calc-action="increment" data-target="fryers">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ss-calc-row">
+        <div class="ss-calc-label">Fryer Capacity (lb)</div>
+        <div class="ss-calc-cell">
+          <select id="calc-capacity" class="ss-select">
+            <option value="25" {% if section.settings.default_capacity == "25" %}selected{% endif %}>25 lb</option>
+            <option value="35" {% if section.settings.default_capacity == "35" %}selected{% endif %}>35 lb</option>
+            <option value="50" {% if section.settings.default_capacity == "50" %}selected{% endif %}>50 lb</option>
+            <option value="75" {% if section.settings.default_capacity == "75" %}selected{% endif %}>75 lb</option>
+            <option value="100" {% if section.settings.default_capacity == "100" %}selected{% endif %}>100 lb</option>
+            <option value="125" {% if section.settings.default_capacity == "125" %}selected{% endif %}>125 lb</option>
+            <option value="150" {% if section.settings.default_capacity == "150" %}selected{% endif %}>150 lb</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ss-calc-row">
+        <div class="ss-calc-label">Weekly Oil Usage (LB)</div>
+        <div class="ss-calc-cell ss-calc-cell--readonly">
+          {% assign default_total_oil = section.settings.default_fryers | times: section.settings.default_capacity | times: 2 %}
+          <span id="calc-total-oil">{{ default_total_oil }}</span>
+        </div>
+      </div>
+
+      <div class="ss-calc-row ss-calc-row--price">
+        <div class="ss-calc-label flex flex-col items-start">
+          <div>Price per box of oil</div>
+          <div class="ss-calc-row-note">A commercial box of cooking oil is typically 35 lbs</div>
+        </div>
+        <div class="ss-calc-cell">
+          <div class="ss-price-input-wrap">
+            <span class="ss-price-prefix">$</span>
+            <input type="text" id="calc-price-input" class="ss-price-input"
+                   maxlength="6" placeholder="xx.xx" inputmode="decimal">
+          </div>
+        </div>
+      </div>
+
+      <div class="ss-calc-row ss-calc-row--accent">
+        <div class="ss-calc-label">Oil Reduction %</div>
+        <div class="ss-calc-cell ss-calc-cell--accent">
+          {{ section.settings.oil_reduction }}%
+        </div>
+      </div>
+
+      <div class="ss-calc-row ss-calc-row--savings">
+        <div class="ss-calc-label">Weekly Oil Savings</div>
+        <div class="ss-calc-cell ss-calc-cell--savings">
+          $<span id="calc-weekly">0.00</span>
+        </div>
+      </div>
+
+      <div class="ss-calc-row ss-calc-row--annual">
+        <div class="ss-calc-label">Annual Oil Savings $</div>
+        <div class="ss-calc-cell ss-calc-cell--annual">
+          $<span id="calc-annual">0.00</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ss-calc-note">
+      <p>
+        Savings calculated based on {{ section.settings.oil_reduction }}% oil usage reduction from The BOSS<sup>®</sup> assuming fryers are changed 2x per week
+      </p>
+      <p>
+        Your cost savings may be higher or lower, depending on your specific situation.
+      </p>
+    </div>
+
+    {% unless is_boss_page %}
+      <div class="ss-calc-cta">
+        <a href="{{ section.settings.cta_url }}" class="ss-calc-cta-btn">{{ section.settings.cta_text }}</a>
+      </div>
+    {% endunless %}
+  </div>
+</div>
+
+<style>
+  #ss-calc-title {
+    margin-bottom:0!important;
+  }
+  .ss-calc-panel {
+    border-radius: 6px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.35);
+  }
+  
+  .ss-calc-label {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    font-size: .9rem;
+    letter-spacing: .04em;
+    font-weight: 600;
+  }
+  .ss-calc-cell {
+    font-size: .95rem;
+    font-weight: 500;
+  }
+  .ss-stepper-btn {
+    border-radius: 6px;
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
+  .ss-select {
+    border-radius: 4px;
+    font-size: .9rem;
+  }
+  .ss-calc-row {
+    min-height: 52px;
+  }
+  .ss-calc-row-note {
+    display:block;
+    font-size: .72rem;
+    font-weight: 400;
+    opacity: .55;
+    padding: 0.2rem 0 0 0;
+    margin-top: -4px;
+    text-wrap:balance;
+    text-transform: none;
+  }
+  .ss-price-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .ss-price-prefix {
+    font-weight: 600;
+    font-size: .95rem;
+  }
+  .ss-price-input {
+    width: 72px;
+    text-align: right;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+  }
+  .ss-price-input:focus {
+    outline: 2px solid #f59e0b;
+    border-color: transparent;
+  }
+</style>
+
+<script>
+(function () {
+  var OIL_REDUCTION = {{ section.settings.oil_reduction }} / 100;
+
+  // State
+  var fryers = {{ section.settings.default_fryers }};
+  var pricePerBox = {{ section.settings.default_price | plus: 0 }}; // $ per 35-lb box
+  var FRYER_MIN = 1, FRYER_MAX = 20;
+  var PRICE_MIN = 10.00, PRICE_MAX = 100.00;
+  var BOX_LBS = 35; // lbs per box
+
+  // Elements
+  var modal         = document.getElementById('savings-calculator-modal');
+  var elFryers      = document.getElementById('calc-fryers');
+  var elCapacity    = document.getElementById('calc-capacity');
+  var elTotalOil    = document.getElementById('calc-total-oil');
+  var elPriceInput  = document.getElementById('calc-price-input');
+  var elWeekly      = document.getElementById('calc-weekly');
+  var elAnnual      = document.getElementById('calc-annual');
+  var backdrop      = modal && modal.querySelector('.ss-calc-backdrop');
+  var closeBtn      = modal && modal.querySelector('.ss-calc-close');
+
+  if (!modal) return;
+
+  // ── Animated counter ────────────────────────────────────────────────
+  function animateCount(el, from, to, duration) {
+    var start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / duration, 1);
+      var ease = 1 - Math.pow(1 - p, 3);
+      var val = from + (to - from) * ease;
+      el.textContent = val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ── Recalculate ──────────────────────────────────────────────────────
+  function recalc(animate) {
+    var capacity   = parseInt(elCapacity.value, 10);
+    var totalOil   = fryers * capacity * 2;
+    var pricePerLb = pricePerBox / BOX_LBS;
+    var weekly     = totalOil * OIL_REDUCTION * pricePerLb;
+    var annual     = weekly * 52;
+
+    elTotalOil.textContent = totalOil;
+
+    var prevW = parseFloat((elWeekly.textContent || '0').replace(/,/g, '')) || 0;
+    var prevA = parseFloat((elAnnual.textContent  || '0').replace(/,/g, '')) || 0;
+
+    if (animate === false) {
+      elWeekly.textContent = weekly.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      elAnnual.textContent = annual.toLocaleString('en-US',  { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    } else {
+      animateCount(elWeekly, prevW, weekly, 550);
+      animateCount(elAnnual, prevA, annual,  750);
+    }
+  }
+
+  // ── Steppers ─────────────────────────────────────────────────────────
+  modal.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-calc-action]');
+    if (!btn) return;
+    var dir = btn.dataset.calcAction === 'increment' ? 1 : -1;
+    var target = btn.dataset.target;
+
+    if (target === 'fryers') {
+      fryers = Math.min(FRYER_MAX, Math.max(FRYER_MIN, fryers + dir));
+      elFryers.textContent = fryers;
+      recalc(true);
+    }
+  });
+
+  // ── Price per box input ───────────────────────────────────────────────
+  function clampPrice(n) {
+    if (isNaN(n)) return PRICE_MIN;
+    return Math.min(PRICE_MAX, Math.max(PRICE_MIN, n));
+  }
+
+  if (elPriceInput) {
+    elPriceInput.value = pricePerBox.toFixed(2);
+
+    elPriceInput.addEventListener('input', function () {
+      // Strip non-numeric except one decimal point; limit to 2 decimal places
+      var val = this.value.replace(/[^0-9.]/g, '');
+      var parts = val.split('.');
+      if (parts.length > 2) val = parts[0] + '.' + parts.slice(1).join('');
+      if (parts[1] !== undefined && parts[1].length > 2) val = parts[0] + '.' + parts[1].slice(0, 2);
+      this.value = val;
+      var n = parseFloat(val);
+      if (!isNaN(n)) {
+        pricePerBox = clampPrice(n);
+        recalc(true);
+      }
+    });
+
+    elPriceInput.addEventListener('blur', function () {
+      pricePerBox = clampPrice(parseFloat(this.value));
+      this.value = pricePerBox.toFixed(2);
+      recalc(false);
+    });
+  }
+
+  elCapacity && elCapacity.addEventListener('change', function () { recalc(true); });
+
+  // ── Open / close ──────────────────────────────────────────────────────
+  function openCalc() {
+    modal.setAttribute('aria-hidden', 'false');
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    recalc(true);
+  }
+
+  function closeCalc() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    // clear hash without triggering hashchange loop
+    history.pushState('', document.title, window.location.pathname + window.location.search);
+  }
+
+  if (closeBtn) closeBtn.addEventListener('click', closeCalc);
+  if (backdrop)  backdrop.addEventListener('click', closeCalc);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeCalc();
+  });
+
+  // ── Trigger methods ───────────────────────────────────────────────────
+  // 1. Global function
+  window.openSavingsCalculator = openCalc;
+
+  // 2. Hash-based (#calculator)
+  function checkHash() {
+    if (window.location.hash === '#calculator') openCalc();
+  }
+  window.addEventListener('hashchange', checkHash);
+  // Handle case where DOMContentLoaded may have already fired (inline script)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', checkHash);
+  } else {
+    checkHash();
+  }
+
+  // 3. Any link/button with href="#calculator" or data-action="open-calculator"
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[href="#calculator"], [data-action="open-calculator"]');
+    if (!el) return;
+    e.preventDefault();
+    openCalc();
+  });
+})();
+</script>
+
+
+{% schema %}
+{
+  "name": "Savings Calculator",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Calculator Settings"
+    },
+    {
+      "type": "range",
+      "id": "default_fryers",
+      "label": "Default Number of Fryers",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "default_capacity",
+      "label": "Default Fryer Capacity (lb)",
+      "options": [
+        { "value": "25", "label": "25 lb" },
+        { "value": "35", "label": "35 lb" },
+        { "value": "50", "label": "50 lb" },
+        { "value": "75", "label": "75 lb" },
+        { "value": "100", "label": "100 lb" },
+        { "value": "125", "label": "125 lb" },
+        { "value": "150", "label": "150 lb" }
+      ],
+      "default": "75"
+    },
+    {
+      "type": "range",
+      "id": "default_price",
+      "label": "Default Price per Box of Oil ($)",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "default": 50,
+      "info": "Price per 35-lb box of oil in whole dollars. e.g. 50 = $50.00. Min: $10, Max: $100."
+    },
+    {
+      "type": "range",
+      "id": "oil_reduction",
+      "label": "Oil Reduction %",
+      "min": 10,
+      "max": 90,
+      "step": 5,
+      "default": 50,
+      "info": "Percentage of oil savings achieved with The Shortening Shuttle®. Displayed as a fixed value users cannot change."
+    },
+    {
+      "type": "header",
+      "content": "Product CTA Button",
+      "info": "Shown only when this calculator is not on the /products/the-boss page."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button Text",
+      "default": "Shop The BOSS®"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Savings Calculator",
+      "category": "Shortening Shuttle"
+    }
+  ]
+}
+{% endschema %}
+ 

@@ -1,4 +1,5 @@
 <header id="site-header" x-data="{ mobileOpen: false }">
+
   <!-- ============================= -->
   <!-- EYEBROW BAR -->
   <!-- ============================= -->
@@ -16,23 +17,29 @@
 
       <div class="header__icons flex items-center">
         <a
+          id="header-cart-link"
           href="{{ routes.cart_url }}"
           class="header-icon {% if cart.item_count > 0 %}cart-has-items{% endif %}"
+          aria-label="Cart"
         >
           {{ 'icon-truck.svg' | inline_asset_content }}
 
           {% if cart.item_count > 0 %}
-            <span class="cart-count-badge">{{ cart.item_count }}</span>
+            <span class="cart-count-badge" aria-live="polite">{{ cart.item_count }}</span>
+          {% else %}
+            <span class="cart-count-badge hidden" aria-live="polite">0</span>
           {% endif %}
         </a>
+
       </div>
     </div>
   </div>
 
   <!-- ============================= -->
-  <!-- MAIN NAVIGATION HEADER -->
+  <!-- MAIN NAVIGATION -->
   <!-- ============================= -->
   <div class="navigation">
+
     <!-- MOBILE MENU BUTTON -->
     <button
       class="lg:hidden mobile-menu-button flex items-center justify-center w-10 h-10"
@@ -48,16 +55,13 @@
         {{
           section.settings.logo_light
           | image_url: width: 180
-          | image_tag: class: '!bg-transparent object-contain', alt: section.settings.logo_light.alt
+          | image_tag: class: '!bg-transparent object-contain'
         }}
       </a>
     </div>
 
-    <!-- DESKTOP NAVIGATION -->
-    <nav
-      class="desktop-nav hidden lg:block relative"
-      x-data="{ openItem: null }"
-    >
+    <!-- DESKTOP NAV -->
+    <nav class="desktop-nav hidden lg:block relative" x-data="{ openItem: null }">
       <ul class="flex gap-8 items-center">
         {% for link in section.settings.menu.links %}
           <li
@@ -66,10 +70,10 @@
             @mouseleave="openItem = null"
           >
             <div class="nav-hover-zone">
+
               {% if link.links != blank %}
                 <button
                   class="nav__parent flex items-center gap-1"
-                  @click="openItem = openItem === {{ forloop.index }} ? null : {{ forloop.index }}"
                   :aria-expanded="openItem === {{ forloop.index }}"
                 >
                   {{ link.title }}
@@ -78,13 +82,84 @@
                   </span>
                 </button>
 
-                {% render 'menu-mega', link: link, index: forloop.index %}
+                <!-- ============================= -->
+                <!-- MEGA MENU -->
+                <!-- ============================= -->
+                <div
+                  class="ss-mega-menu"
+                  x-show="openItem === {{ forloop.index }}"
+                  x-transition
+                >
+                  <div class="ss-menu-wrapper">
+
+                    {% for child in link.links %}
+                      <div class="mega-menu__item space-y-3">
+
+                        <!-- SECONDARY ITEM -->
+                        {% assign icon = blank %}
+                        {% if child.metafields.custom.icon != blank %}
+                          {% assign icon = child.metafields.custom.icon %}
+                        {% elsif child.object and child.object.metafields.custom.menu_icon != blank %}
+                          {% assign icon = child.object.metafields.custom.menu_icon %}
+                        {% endif %}
+
+                        <a
+                          href="{{ child.url }}"
+                          class="flex items-center gap-3 font-semibold text-gray-800 hover:text-black"
+                        >
+                          {% if icon != blank %}
+                            <img
+                              src="{{ icon | image_url: width: 48 }}"
+                              class="w-6 h-6 shrink-0 object-contain"
+                              alt=""
+                            >
+                          {% endif %}
+                          <span>{{ child.title }}</span>
+                        </a>
+
+                        <!-- TERTIARY ITEMS -->
+                        {% if child.links != blank %}
+                          <ul class="mega-menu__list space-y-2">
+                            {% for subchild in child.links %}
+
+                              {% assign icon = blank %}
+                              {% if subchild.metafields.custom.icon != blank %}
+                                {% assign icon = subchild.metafields.custom.icon %}
+                              {% elsif subchild.object and subchild.object.metafields.custom.menu_icon != blank %}
+                                {% assign icon = subchild.object.metafields.custom.menu_icon %}
+                              {% endif %}
+
+                              <li>
+                                <a
+                                  href="{{ subchild.url }}"
+                                  class="flex items-center gap-3 text-sm text-gray-600 hover:text-gray-900"
+                                >
+                                  {% if icon != blank %}
+                                    <img
+                                      src="{{ icon | image_url: width: 48 }}"
+                                      class="w-6 h-6 shrink-0 object-contain"
+                                      alt=""
+                                    >
+                                  {% endif %}
+                                  <span>{{ subchild.title }}</span>
+                                </a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}
+
+                      </div>
+                    {% endfor %}
+
+                  </div>
+                </div>
 
               {% else %}
                 <a href="{{ link.url }}" class="nav__link">
                   {{ link.title }}
                 </a>
               {% endif %}
+
             </div>
           </li>
         {% endfor %}
@@ -93,113 +168,115 @@
   </div>
 
   <!-- =============================== -->
-  <!-- MOBILE SLIDE-IN MENU -->
+  <!-- MOBILE MENU -->
   <!-- =============================== -->
   <div
     class="fixed inset-0 z-50 bg-black bg-opacity-50 lg:hidden"
     x-show="mobileOpen"
-    x-transition.opacity
     @click.self="mobileOpen = false"
   >
-    <div
-      class="absolute left-0 top-0 h-full w-80 bg-white shadow-2xl p-6 overflow-y-auto"
-      x-transition:enter="transform transition ease-out duration-300"
-      x-transition:enter-start="-translate-x-full"
-      x-transition:enter-end="translate-x-0"
-      x-transition:leave="transform transition ease-in duration-200"
-      x-transition:leave-start="translate-x-0"
-      x-transition:leave-end="-translate-x-full"
-    >
-      <!-- CLOSE BUTTON -->
+    <div class="absolute left-0 top-0 h-full w-80 bg-white p-6 overflow-y-auto">
+
       <div class="flex justify-between items-center mb-6">
         <span class="text-xl font-bold">Menu</span>
-        <button @click="mobileOpen = false" aria-label="Close Menu">
+        <button @click="mobileOpen = false">
           {% render 'icon-close' %}
         </button>
       </div>
 
-      <!-- MOBILE NAVIGATION -->
-      <ul class="flex flex-col space-y-4">
+      <ul class="space-y-4">
         {% for link in section.settings.menu.links %}
           <li x-data="{ open: false }">
+
             {% if link.links != blank %}
-              <!-- LEVEL 1 WITH CHILDREN -->
               <button
-                class="flex justify-between items-center w-full text-left font-medium text-gray-800"
+                class="flex justify-between items-center w-full font-medium text-gray-800"
                 @click="open = !open"
               >
                 <span>{{ link.title }}</span>
-                <span :class="open ? 'rotate-180' : ''" class="transition">
-                  {% render 'chevron-down' %}
-                </span>
+                {% render 'chevron-down' %}
               </button>
 
-              <!-- LEVEL 2 WRAPPER -->
-              <ul
-                x-show="open"
-                x-transition
-                class="mt-2 ml-4 space-y-3 border-l border-gray-200 pl-4 text-gray-700"
-              >
+              <ul x-show="open" class="mt-3 ml-4 space-y-4 border-l pl-4">
+
                 {% for child in link.links %}
                   <li x-data="{ open2: false }">
+
+                    {% assign icon = blank %}
+                    {% if child.metafields.custom.icon != blank %}
+                      {% assign icon = child.metafields.custom.icon %}
+                    {% elsif child.object and child.object.metafields.custom.menu_icon != blank %}
+                      {% assign icon = child.object.metafields.custom.menu_icon %}
+                    {% endif %}
+
                     {% if child.links != blank %}
-                      <!-- LEVEL 2 WITH CHILDREN -->
                       <button
-                        class="flex justify-between items-center w-full text-left font-medium text-gray-700"
+                        class="flex justify-between items-center w-full text-gray-700"
                         @click="open2 = !open2"
                       >
-                        <span>{{ child.title }}</span>
-                        <span :class="open2 ? 'rotate-180' : ''" class="transition">
-                          {% render 'chevron-down' %}
+                        <span class="flex items-center gap-3">
+                          {% if icon != blank %}
+                            <img src="{{ icon | image_url: width: 32 }}" class="w-4 h-4">
+                          {% endif %}
+                          {{ child.title }}
                         </span>
+                        {% render 'chevron-down' %}
                       </button>
 
-                      <!-- LEVEL 3 WRAPPER -->
-                      <ul
-                        x-show="open2"
-                        x-transition
-                        class="mt-2 ml-4 space-y-2 border-l border-gray-200 pl-4 text-gray-600"
-                      >
+                      <ul x-show="open2" class="mt-2 ml-4 space-y-2 border-l pl-4">
                         {% for subchild in child.links %}
+
+                          {% assign icon = blank %}
+                          {% if subchild.metafields.custom.icon != blank %}
+                            {% assign icon = subchild.metafields.custom.icon %}
+                          {% elsif subchild.object and subchild.object.metafields.custom.menu_icon != blank %}
+                            {% assign icon = subchild.object.metafields.custom.menu_icon %}
+                          {% endif %}
+
                           <li>
                             <a
                               href="{{ subchild.url }}"
-                              class="block py-1 hover:text-gray-900"
+                              class="flex items-center gap-3 text-gray-600 hover:text-gray-900"
                             >
+                              {% if icon != blank %}
+                                <img src="{{ icon | image_url: width: 48 }}" class="w-6 h-6">
+                              {% endif %}
                               {{ subchild.title }}
                             </a>
                           </li>
+
                         {% endfor %}
                       </ul>
 
                     {% else %}
-                      <!-- LEVEL 2 SIMPLE LINK -->
                       <a
                         href="{{ child.url }}"
-                        class="block font-medium text-gray-700 hover:text-gray-900"
+                        class="flex items-center gap-3 text-gray-700 hover:text-gray-900"
                       >
+                        {% if icon != blank %}
+                          <img src="{{ icon | image_url: width: 48 }}" class="w-6 h-6">
+                        {% endif %}
                         {{ child.title }}
                       </a>
                     {% endif %}
+
                   </li>
                 {% endfor %}
-              </ul>
 
+              </ul>
             {% else %}
-              <!-- LEVEL 1 SIMPLE LINK -->
-              <a
-                href="{{ link.url }}"
-                class="block font-medium text-gray-800 py-1 hover:text-blue-700"
-              >
+              <a href="{{ link.url }}" class="block font-medium text-gray-800">
                 {{ link.title }}
               </a>
             {% endif %}
           </li>
         {% endfor %}
       </ul>
+
     </div>
   </div>
 </header>
+
 
 <!-- ===================================== -->
 <!-- POSITIONING + MEGA MENU BEHAVIOR -->
@@ -297,7 +374,8 @@
     left: 0;
     width: 100vw;
     background: #ffffff;
-    border: none;
+    border-top: 3px solid #20204b;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     padding-top: 1px; /* gap fix */
     z-index: 1000;
 
@@ -319,10 +397,32 @@
   .ss-menu-wrapper {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 2.5rem 2rem;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 3rem;
+  }
+
+  /*********************************************************
+ TOP-LEVEL NAV LINKS
+**********************************************************/
+  .nav__link,
+  .nav__parent {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #111;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s ease;
+  }
+
+  .nav__link:hover,
+  .nav__parent:hover {
+    color: #20204b;
   }
 
   /*********************************************************
@@ -330,39 +430,52 @@
 **********************************************************/
   .mega-menu__heading {
     display: block;
-    font-weight: 700;
-    font-size: 1.2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 400;
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     margin-bottom: 0.5rem;
     color: #111;
     text-decoration: none;
   }
 
   .mega-menu__item > a {
-    font-size: 0.95rem;
-    color: #444;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #20204b;
     text-decoration: none;
+    transition: color 0.2s ease, letter-spacing 0.2s ease;
   }
 
   .mega-menu__item > a:hover {
     color: #000;
-    text-decoration: underline;
-  }
-
-  .mega-menu__list {
-    margin-top: 0.25rem;
-    padding-left: 1rem;
-    border-left: 1px solid #e5e7eb;
-  }
-
-  .mega-menu__list a {
-    font-size: 1rem;
-    color: #666;
+    letter-spacing: 0.12em;
     text-decoration: none;
   }
 
+  .mega-menu__list {
+    margin-top: 0.5rem;
+    padding-left: 1rem;
+    border-left: 3px solid #20204b;
+  }
+
+  .mega-menu__list a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #444;
+    text-decoration: none;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+    display: block;
+  }
+
   .mega-menu__list a:hover {
-    color: #111;
-    text-decoration: underline;
+    color: #20204b;
+    padding-left: 4px;
+    text-decoration: none;
   }
 
   /*********************************************************
@@ -392,7 +505,7 @@
     transition: opacity 0.2s ease, transform 0.2s ease;
   }
   .header__icons .header-icon svg path {
-    fill: white;
+    fill: white!important;
   }
 
   .header__icons .header-icon:hover {

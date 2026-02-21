@@ -9,13 +9,13 @@
  */
 {
   "sections": {
-    "ss_internal_hero_8xeYwE": {
+    "ss_internal_hero_e9XKfW": {
       "type": "ss-internal-hero",
       "name": "Internal Hero",
       "settings": {
-        "background_image": "shopify://shop_images/economy-hero-bg.png",
-        "heading": "View all of our products",
-        "subheading": ""
+        "background_image": "shopify://shop_images/shuttles-all.png",
+        "heading": "Shop All Shortening Shuttle® Models",
+        "subheading": "Find the right model for your kitchen — from compact options for food trucks to high-capacity solutions for institutional operations."
       }
     },
     "main": {
@@ -24,7 +24,7 @@
     }
   },
   "order": [
-    "ss_internal_hero_8xeYwE",
+    "ss_internal_hero_e9XKfW",
     "main"
   ]
 }

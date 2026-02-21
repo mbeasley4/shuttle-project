@@ -1,0 +1,273 @@
+{% if section.blocks.size > 0 %}
+  {% for block in section.blocks %}
+    {% if block.type == 'callout' %}
+      <div id="ss-callout" class="callout-for-purchase" style="display:none;" {{ block.shopify_attributes }}>
+        <div class="callout-for-purchase-header">Recommended Accessory</div>
+        <div class="callout-for-purchase-body">
+          {% if block.settings.image != blank %}
+            <img
+              src="{{ block.settings.image | img_url: '262x175', crop: 'center' }}"
+              alt="{{ block.settings.image_alt | escape }}"
+              width="262"
+              height="175"
+              loading="lazy"
+            >
+          {% endif %}
+          <div>
+            {% if block.settings.heading != blank %}
+              <h3>{{ block.settings.heading }}</h3>
+            {% endif %}
+            {% if block.settings.body_text != blank %}
+              <p>{{ block.settings.body_text }}</p>
+            {% endif %}
+            {% if block.settings.product != blank %}
+              {% assign callout_product = block.settings.product %}
+              {% assign variant = callout_product.selected_or_first_available_variant %}
+              <button
+                type="button"
+                class="callout-atc-btn"
+                data-variant-id="{{ variant.id }}"
+                {% unless variant.available %}disabled{% endunless %}
+              >
+                {% if variant.available %}
+                  {{ block.settings.button_label | default: 'Add to Cart' }} — {{ variant.price | money }}
+                {% else %}
+                  Sold Out
+                {% endif %}
+              </button>
+            {% elsif block.settings.link_url != blank %}
+              <button
+                type="button"
+                class="callout-atc-btn"
+                data-product-url="{{ block.settings.link_url }}"
+              >
+                {{ block.settings.button_label | default: 'Add to Cart' }}
+              </button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Product Callout",
+  "limit": 1,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Product Callout",
+      "category": "Shortening Shuttle"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "callout",
+      "name": "Callout Block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Callout Image"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image Alt Text"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Important Accessory"
+        },
+        {
+          "type": "textarea",
+          "id": "body_text",
+          "label": "Body Text"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product to Add to Cart"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "Add to Cart"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Fallback Link URL (if no product selected)"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+.callout-for-purchase {
+  position: relative;
+  background: #fff;
+  border: 2px solid #20204b;
+  border-radius: 10px;
+  padding: 0;
+  margin: 2.5rem 0;
+  overflow: hidden;
+  box-shadow: 0 12px 48px rgba(32, 32, 75, 0.22), 0 2px 8px rgba(32, 32, 75, 0.1);
+  font-family: 'Montserrat', sans-serif;
+}
+.callout-for-purchase-header {
+  position:absolute;
+  top:5px;
+  left:0;
+  background: #8B0000;
+  color: #fff;
+  padding: 0.75rem 1.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.callout-for-purchase-body {
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-direction: column;
+}
+.callout-for-purchase h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: #20204b;
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.callout-for-purchase p {
+  margin-bottom: 0;
+  color: #444;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+.callout-for-purchase img {
+  flex-shrink: 0;
+  border-radius: 6px;
+}
+.callout-atc-btn {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 9px 24px;
+  background: #20204b;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.callout-atc-btn:hover {
+  background: #2d2d6b;
+}
+.callout-atc-btn:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+@media (max-width: 600px) {
+  .callout-for-purchase-body {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+.callout-atc-btn.loading {
+  opacity: 0.65;
+  cursor: wait;
+}
+.callout-atc-btn.added {
+  background: #20204b;
+}
+</style>
+
+<script>
+  function calloutAddToCart(btn, variantId) {
+    var originalText = btn.textContent.trim();
+    btn.disabled = true;
+    btn.classList.add('loading');
+    btn.textContent = 'Adding…';
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: variantId, quantity: 1 })
+    })
+    .then(function(res) {
+      if (!res.ok) throw new Error('failed');
+      return res.json();
+    })
+    .then(function() {
+      btn.classList.remove('loading');
+      btn.classList.add('added');
+      btn.textContent = 'Added to Cart!';
+      document.dispatchEvent(new CustomEvent('cart:updated'));
+      setTimeout(function() {
+        btn.classList.remove('added');
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }, 2500);
+    })
+    .catch(function() {
+      btn.classList.remove('loading');
+      btn.textContent = originalText;
+      btn.disabled = false;
+    });
+  }
+
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.callout-atc-btn');
+    if (!btn || btn.disabled) return;
+
+    // Product picker path — variant ID already known
+    if (btn.dataset.variantId) {
+      calloutAddToCart(btn, btn.dataset.variantId);
+      return;
+    }
+
+    // Link URL path — fetch the product to get its first available variant
+    if (btn.dataset.productUrl) {
+      var url = btn.dataset.productUrl.replace(/\/$/, '') + '.js';
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btn.textContent = 'Adding…';
+
+      fetch(url)
+      .then(function(res) {
+        if (!res.ok) throw new Error('product not found');
+        return res.json();
+      })
+      .then(function(product) {
+        var variant = product.variants.find(function(v) { return v.available; });
+        if (!variant) {
+          btn.textContent = 'Sold Out';
+          return;
+        }
+        calloutAddToCart(btn, variant.id);
+      })
+      .catch(function() {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        btn.textContent = btn.dataset.originalText || 'Add to Cart';
+      });
+    }
+  });
+</script>
